@@ -19,7 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)isSupported:(NSString *)componentName;
 
 + (void)supportLegacyViewManagerWithName:(NSString *)componentName;
-+ (void)supportLegacyViewManagersWithPrefix:(NSString *)prefix;
 
 @end
 

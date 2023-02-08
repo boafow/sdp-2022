@@ -249,14 +249,10 @@ std::pair<NextStatePtr, CommandPtr> InspectorState::Running::didPause(
   } else if (reason == debugger::PauseReason::EvalComplete) {
     assert(pendingEvalPromise_);
 
-    if (auto userCallbackException = runUserCallback(
-            pendingEvalResultTransformer_,
-            inspector_.debugger_.getProgramState().getEvalResult())) {
-      pendingEvalPromise_->setException(*userCallbackException);
-    } else {
-      pendingEvalPromise_->setValue(
-          inspector_.debugger_.getProgramState().getEvalResult());
-    }
+    pendingEvalResultTransformer_(
+        inspector_.debugger_.getProgramState().getEvalResult());
+    pendingEvalPromise_->setValue(
+        inspector_.debugger_.getProgramState().getEvalResult());
     pendingEvalPromise_.reset();
   } else if (
       reason == debugger::PauseReason::Breakpoint &&
@@ -368,14 +364,10 @@ std::pair<NextStatePtr, CommandPtr> InspectorState::Paused::didPause(
       break;
     case debugger::PauseReason::EvalComplete: {
       assert(pendingEvalPromise_);
-      if (auto userCallbackException = runUserCallback(
-              pendingEvalResultTransformer_,
-              inspector_.debugger_.getProgramState().getEvalResult())) {
-        pendingEvalPromise_->setException(*userCallbackException);
-      } else {
-        pendingEvalPromise_->setValue(
-            inspector_.debugger_.getProgramState().getEvalResult());
-      }
+      pendingEvalResultTransformer_(
+          inspector_.debugger_.getProgramState().getEvalResult());
+      pendingEvalPromise_->setValue(
+          inspector_.debugger_.getProgramState().getEvalResult());
       pendingEvalPromise_.reset();
     } break;
     case debugger::PauseReason::ScriptLoaded:

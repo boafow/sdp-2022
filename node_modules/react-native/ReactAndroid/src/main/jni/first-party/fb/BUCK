@@ -19,7 +19,7 @@ oss_cxx_library(
         "-fexceptions",
         "-Wall",
         "-Werror",
-        "-std=c++17",
+        "-std=c++14",
         "-DDISABLE_CPUCAP",
         "-DDISABLE_XPLAT",
     ],

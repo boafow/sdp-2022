@@ -1,0 +1,2 @@
+import { EventStreamPayloadHandlerProvider } from "@aws-sdk/types";
+export declare const eventStreamPayloadHandlerProvider: EventStreamPayloadHandlerProvider;

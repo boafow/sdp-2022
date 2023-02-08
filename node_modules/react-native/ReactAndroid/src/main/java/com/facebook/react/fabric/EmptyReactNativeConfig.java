@@ -19,7 +19,7 @@ public class EmptyReactNativeConfig implements ReactNativeConfig {
   }
 
   @Override
-  public long getInt64(final String s) {
+  public int getInt64(final String s) {
     return 0;
   }
 

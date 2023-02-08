@@ -15,8 +15,6 @@
 
 #import "CoreModulesPlugins.h"
 
-#import <folly/Optional.h>
-
 using namespace facebook::react;
 
 static NSString *interfaceIdiom(UIUserInterfaceIdiom idiom)

@@ -15,7 +15,7 @@ namespace jsi {
 class FileBuffer : public Buffer {
  public:
   FileBuffer(const std::string& path);
-  ~FileBuffer() override;
+  ~FileBuffer();
 
   size_t size() const override {
     return size_;

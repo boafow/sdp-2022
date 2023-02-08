@@ -6,7 +6,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <React/RCTBridgeModuleDecorator.h>
 #import <UIKit/UIKit.h>
 #include <folly/dynamic.h>
 
@@ -19,9 +18,7 @@ typedef void (^InterceptorBlock)(std::string eventName, folly::dynamic event);
 
 @interface RCTLegacyViewManagerInteropCoordinator : NSObject
 
-- (instancetype)initWithComponentData:(RCTComponentData *)componentData
-                               bridge:(RCTBridge *)bridge
-                bridgelessInteropData:(RCTBridgeModuleDecorator *)bridgelessInteropData;
+- (instancetype)initWithComponentData:(RCTComponentData *)componentData bridge:(RCTBridge *)bridge;
 
 - (UIView *)createPaperViewWithTag:(NSInteger)tag;
 

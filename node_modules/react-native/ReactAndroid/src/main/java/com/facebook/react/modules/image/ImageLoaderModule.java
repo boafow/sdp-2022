@@ -8,7 +8,6 @@
 package com.facebook.react.modules.image;
 
 import android.net.Uri;
-import android.text.TextUtils;
 import android.util.SparseArray;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -277,13 +276,11 @@ public class ImageLoaderModule extends NativeImageLoaderAndroidSpec
         ImagePipeline imagePipeline = getImagePipeline();
         for (int i = 0; i < uris.size(); i++) {
           String uriString = uris.getString(i);
-          if (!TextUtils.isEmpty(uriString)) {
-            final Uri uri = Uri.parse(uriString);
-            if (imagePipeline.isInBitmapMemoryCache(uri)) {
-              result.putString(uriString, "memory");
-            } else if (imagePipeline.isInDiskCacheSync(uri)) {
-              result.putString(uriString, "disk");
-            }
+          final Uri uri = Uri.parse(uriString);
+          if (imagePipeline.isInBitmapMemoryCache(uri)) {
+            result.putString(uriString, "memory");
+          } else if (imagePipeline.isInDiskCacheSync(uri)) {
+            result.putString(uriString, "disk");
           }
         }
         promise.resolve(result);

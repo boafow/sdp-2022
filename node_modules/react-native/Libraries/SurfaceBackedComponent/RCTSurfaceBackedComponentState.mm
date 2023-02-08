@@ -7,14 +7,16 @@
 
 #import "RCTSurfaceBackedComponentState.h"
 
+#import <React/RCTSurface.h>
+
 @implementation RCTSurfaceBackedComponentState
 
-+ (instancetype)newWithSurface:(id<RCTSurfaceProtocol>)surface
++ (instancetype)newWithSurface:(RCTSurface *)surface
 {
   return [[self alloc] initWithSurface:surface];
 }
 
-- (instancetype)initWithSurface:(id<RCTSurfaceProtocol>)surface
+- (instancetype)initWithSurface:(RCTSurface *)surface
 {
   if (self = [super init]) {
     _surface = surface;

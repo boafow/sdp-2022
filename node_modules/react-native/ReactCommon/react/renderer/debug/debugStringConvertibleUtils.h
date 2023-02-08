@@ -7,9 +7,9 @@
 
 #pragma once
 
+#include <butter/optional.h>
 #include <limits>
 #include <memory>
-#include <optional>
 #include <string>
 #include <vector>
 
@@ -34,9 +34,9 @@ debugStringConvertibleItem(std::string name, T value, T defaultValue = {}) {
 template <typename T>
 inline SharedDebugStringConvertible debugStringConvertibleItem(
     std::string name,
-    std::optional<T> value,
+    butter::optional<T> value,
     T defaultValue = {}) {
-  if (!value.has_value()) {
+  if (!value.hasValue()) {
     return nullptr;
   }
 

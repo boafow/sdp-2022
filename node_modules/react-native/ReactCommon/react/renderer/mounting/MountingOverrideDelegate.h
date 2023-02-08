@@ -36,7 +36,7 @@ class MountingOverrideDelegate {
    * @param mountingCoordinator
    * @return
    */
-  virtual std::optional<MountingTransaction> pullTransaction(
+  virtual butter::optional<MountingTransaction> pullTransaction(
       SurfaceId surfaceId,
       MountingTransaction::Number number,
       TransactionTelemetry const &telemetry,

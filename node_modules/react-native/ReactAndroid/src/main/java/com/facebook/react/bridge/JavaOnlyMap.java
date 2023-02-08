@@ -31,10 +31,6 @@ public class JavaOnlyMap implements ReadableMap, WritableMap {
     return new JavaOnlyMap(keysAndValues);
   }
 
-  public static JavaOnlyMap from(Map<String, Object> map) {
-    return new JavaOnlyMap(map);
-  }
-
   public static JavaOnlyMap deepClone(ReadableMap map) {
     JavaOnlyMap res = new JavaOnlyMap();
     ReadableMapKeySetIterator iter = map.keySetIterator();

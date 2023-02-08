@@ -9,7 +9,6 @@
 
 #include <react/renderer/core/BatchedEventQueue.h>
 #include <react/renderer/core/EventBeat.h>
-#include <react/renderer/core/EventListener.h>
 #include <react/renderer/core/EventPriority.h>
 #include <react/renderer/core/EventQueueProcessor.h>
 #include <react/renderer/core/StateUpdate.h>
@@ -53,18 +52,6 @@ class EventDispatcher {
   void dispatchStateUpdate(StateUpdate &&stateUpdate, EventPriority priority)
       const;
 
-#pragma mark - Event listeners
-  /*
-   * Adds provided event listener to the event dispatcher.
-   */
-  void addListener(const std::shared_ptr<EventListener const> &listener) const;
-
-  /*
-   * Removes provided event listener to the event dispatcher.
-   */
-  void removeListener(
-      const std::shared_ptr<EventListener const> &listener) const;
-
  private:
   EventQueue const &getEventQueue(EventPriority priority) const;
 
@@ -72,8 +59,6 @@ class EventDispatcher {
   std::unique_ptr<BatchedEventQueue> synchronousBatchedQueue_;
   std::unique_ptr<UnbatchedEventQueue> asynchronousUnbatchedQueue_;
   std::unique_ptr<BatchedEventQueue> asynchronousBatchedQueue_;
-
-  mutable EventListenerContainer eventListeners_;
 };
 
 } // namespace react

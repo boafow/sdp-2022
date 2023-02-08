@@ -65,6 +65,11 @@ public interface ReactRoot {
   @Nullable
   String getSurfaceID();
 
-  /** @return an {@link AtomicInteger} that represents the state of the ReactRoot object. */
+  /**
+   * This API is likely to change once the fix of T78832286 is confirmed TODO: T78832286 revisit
+   * this API
+   *
+   * @return an {@link AtomicInteger} that represents the state of the ReactRoot object. WARNING:
+   */
   AtomicInteger getState();
 }

@@ -37,7 +37,4 @@ public interface SurfaceDelegate {
 
   /** Hide the surface containing the React content view */
   void hide();
-
-  /** Check if the surface is currently showing */
-  boolean isShowing();
 }

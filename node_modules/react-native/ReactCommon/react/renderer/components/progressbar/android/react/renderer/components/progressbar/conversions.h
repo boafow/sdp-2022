@@ -20,7 +20,7 @@ inline folly::dynamic toDynamic(AndroidProgressBarProps const &props) {
   serializedProps["indeterminate"] = props.indeterminate;
   serializedProps["progress"] = props.progress;
   serializedProps["animating"] = props.animating;
-  serializedProps["color"] = toAndroidRepr(props.color);
+  serializedProps["color"] = toDynamic(props.color);
   serializedProps["testID"] = props.testID;
   return serializedProps;
 }

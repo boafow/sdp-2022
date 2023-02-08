@@ -26,21 +26,15 @@ void setLocalizationLanguagePack(NSDictionary<NSString *, NSString *> *pack)
 
 + (NSString *)RCTLocalizedString:(NSString *)oldString withDescription:(NSString *)description
 {
-  NSString *candidate = nil;
-
   if (_delegate != nil) {
-    candidate = [_delegate localizedString:oldString withDescription:description];
+    return [_delegate localizedString:oldString withDescription:description];
   }
 
-  if (candidate == nil && _languagePack != nil) {
-    candidate = _languagePack[oldString];
+  if (_languagePack != nil) {
+    return _languagePack[oldString];
   }
 
-  if (candidate == nil) {
-    candidate = oldString;
-  }
-
-  return candidate;
+  return oldString;
 }
 
 @end

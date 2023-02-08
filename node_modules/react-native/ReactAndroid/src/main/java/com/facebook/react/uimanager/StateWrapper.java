@@ -25,7 +25,7 @@ public interface StateWrapper {
    * <p>Unstable API - DO NOT USE.
    */
   @Nullable
-  ReadableMapBuffer getStateDataMapBuffer();
+  ReadableMapBuffer getStatDataMapBuffer();
 
   /**
    * Get a ReadableNativeMap object from the C++ layer, which is a K/V map of string keys to values.

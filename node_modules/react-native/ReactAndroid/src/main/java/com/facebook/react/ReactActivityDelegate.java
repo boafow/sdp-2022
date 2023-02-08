@@ -15,7 +15,6 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.Callback;
@@ -34,7 +33,6 @@ public class ReactActivityDelegate {
   private @Nullable PermissionListener mPermissionListener;
   private @Nullable Callback mPermissionsCallback;
   private ReactDelegate mReactDelegate;
-  private boolean mConcurrentRootEnabled;
 
   @Deprecated
   public ReactActivityDelegate(Activity activity, @Nullable String mainComponentName) {
@@ -47,25 +45,8 @@ public class ReactActivityDelegate {
     mMainComponentName = mainComponentName;
   }
 
-  /**
-   * Public API to populate the launch options that will be passed to React. Here you can customize
-   * the values that will be passed as `initialProperties` to the Renderer.
-   *
-   * @return Either null or a key-value map as a Bundle
-   */
   protected @Nullable Bundle getLaunchOptions() {
     return null;
-  }
-
-  private @NonNull Bundle composeLaunchOptions() {
-    Bundle composedLaunchOptions = getLaunchOptions();
-    if (isConcurrentRootEnabled()) {
-      if (composedLaunchOptions == null) {
-        composedLaunchOptions = new Bundle();
-      }
-      composedLaunchOptions.putBoolean("concurrentRoot", true);
-    }
-    return composedLaunchOptions;
   }
 
   protected ReactRootView createRootView() {
@@ -93,10 +74,9 @@ public class ReactActivityDelegate {
 
   protected void onCreate(Bundle savedInstanceState) {
     String mainComponentName = getMainComponentName();
-    Bundle launchOptions = composeLaunchOptions();
     mReactDelegate =
         new ReactDelegate(
-            getPlainActivity(), getReactNativeHost(), mainComponentName, launchOptions) {
+            getPlainActivity(), getReactNativeHost(), mainComponentName, getLaunchOptions()) {
           @Override
           protected ReactRootView createRootView() {
             return ReactActivityDelegate.this.createRootView();
@@ -209,17 +189,5 @@ public class ReactActivityDelegate {
 
   protected Activity getPlainActivity() {
     return ((Activity) getContext());
-  }
-
-  /**
-   * Override this method to enable Concurrent Root on the surface for this Activity. See:
-   * https://reactjs.org/blog/2022/03/29/react-v18.html
-   *
-   * <p>This requires to be rendering on Fabric (i.e. on the New Architecture).
-   *
-   * @return Wether you want to enable Concurrent Root for this surface or not.
-   */
-  protected boolean isConcurrentRootEnabled() {
-    return false;
   }
 }

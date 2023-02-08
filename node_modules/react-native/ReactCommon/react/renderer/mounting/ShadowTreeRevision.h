@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <butter/optional.h>
+
 #include <react/renderer/components/root/RootShadowNode.h>
 #include <react/renderer/mounting/MountingOverrideDelegate.h>
 #include <react/renderer/mounting/MountingTransaction.h>

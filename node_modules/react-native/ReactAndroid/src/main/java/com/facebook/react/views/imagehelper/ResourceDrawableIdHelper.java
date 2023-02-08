@@ -12,7 +12,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import androidx.annotation.Nullable;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import javax.annotation.concurrent.ThreadSafe;
 
@@ -48,7 +47,7 @@ public class ResourceDrawableIdHelper {
     if (name == null || name.isEmpty()) {
       return 0;
     }
-    name = name.toLowerCase(Locale.ROOT).replace("-", "_");
+    name = name.toLowerCase().replace("-", "_");
 
     // name could be a resource id.
     try {

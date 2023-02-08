@@ -10,6 +10,8 @@
 namespace facebook {
 namespace react {
 
+TextLayoutManager::~TextLayoutManager() {}
+
 void *TextLayoutManager::getNativeTextLayoutManager() const {
   return (void *)this;
 }

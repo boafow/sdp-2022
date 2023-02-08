@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LocationServiceException = void 0;
+const tslib_1 = require("tslib");
+tslib_1.__exportStar(require("./Location"), exports);
+tslib_1.__exportStar(require("./LocationClient"), exports);
+tslib_1.__exportStar(require("./commands"), exports);
+tslib_1.__exportStar(require("./models"), exports);
+tslib_1.__exportStar(require("./pagination"), exports);
+var LocationServiceException_1 = require("./models/LocationServiceException");
+Object.defineProperty(exports, "LocationServiceException", { enumerable: true, get: function () { return LocationServiceException_1.LocationServiceException; } });

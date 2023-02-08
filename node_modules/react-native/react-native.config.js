@@ -16,10 +16,12 @@ module.exports = {
   commands: [...ios.commands, ...android.commands],
   platforms: {
     ios: {
+      linkConfig: ios.linkConfig,
       projectConfig: ios.projectConfig,
       dependencyConfig: ios.dependencyConfig,
     },
     android: {
+      linkConfig: android.linkConfig,
       projectConfig: android.projectConfig,
       dependencyConfig: android.dependencyConfig,
     },
@@ -30,7 +32,7 @@ module.exports = {
   reactNativePath: '.',
   project: {
     ios: {
-      sourceDir: './packages/rn-tester',
+      project: './packages/rn-tester/RNTesterPods.xcworkspace',
     },
     android: {
       sourceDir: './packages/rn-tester',

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import androidx.annotation.Nullable;
+import androidx.core.view.ViewCompat;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat.AccessibilityActionCompat;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableMap;
@@ -149,8 +150,7 @@ public class ReactSliderManager extends SimpleViewManager<ReactSlider>
   @Override
   protected ReactSlider createViewInstance(ThemedReactContext context) {
     final ReactSlider slider = new ReactSlider(context, null, STYLE);
-    ReactSliderAccessibilityDelegate.setDelegate(
-        slider, slider.isFocusable(), slider.getImportantForAccessibility());
+    ViewCompat.setAccessibilityDelegate(slider, new ReactSliderAccessibilityDelegate());
     return slider;
   }
 
@@ -310,11 +310,6 @@ public class ReactSliderManager extends SimpleViewManager<ReactSlider>
   }
 
   protected class ReactSliderAccessibilityDelegate extends ReactAccessibilityDelegate {
-    public ReactSliderAccessibilityDelegate(
-        final View view, boolean originalFocus, int originalImportantForAccessibility) {
-      super(view, originalFocus, originalImportantForAccessibility);
-    }
-
     private boolean isSliderAction(int action) {
       return (action == AccessibilityActionCompat.ACTION_SCROLL_FORWARD.getId())
           || (action == AccessibilityActionCompat.ACTION_SCROLL_BACKWARD.getId())

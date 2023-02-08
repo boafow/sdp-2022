@@ -1,0 +1,4 @@
+import { Paginator } from "@aws-sdk/types";
+import { ListGeofencesCommandInput, ListGeofencesCommandOutput } from "../commands/ListGeofencesCommand";
+import { LocationPaginationConfiguration } from "./Interfaces";
+export declare function paginateListGeofences(config: LocationPaginationConfiguration, input: ListGeofencesCommandInput, ...additionalArguments: any): Paginator<ListGeofencesCommandOutput>;

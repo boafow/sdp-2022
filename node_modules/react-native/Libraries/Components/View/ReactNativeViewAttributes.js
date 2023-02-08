@@ -21,7 +21,6 @@ const UIView = {
   accessibilityState: true,
   accessibilityValue: true,
   accessibilityHint: true,
-  accessibilityLanguage: true,
   importantForAccessibility: true,
   nativeID: true,
   testID: true,

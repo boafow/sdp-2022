@@ -189,7 +189,7 @@ folly::Optional<ModuleConfig> ModuleRegistry::getConfig(
     // no constants or methods
     return folly::none;
   } else {
-    return ModuleConfig{index, std::move(config)};
+    return ModuleConfig{index, config};
   }
 }
 

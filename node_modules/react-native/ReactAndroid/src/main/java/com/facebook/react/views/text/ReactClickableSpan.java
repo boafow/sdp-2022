@@ -39,9 +39,11 @@ import com.facebook.react.views.view.ViewGroupClickEvent;
 class ReactClickableSpan extends ClickableSpan implements ReactSpan {
 
   private final int mReactTag;
+  private final int mForegroundColor;
 
-  ReactClickableSpan(int reactTag) {
+  ReactClickableSpan(int reactTag, int foregroundColor) {
     mReactTag = reactTag;
+    mForegroundColor = foregroundColor;
   }
 
   @Override
@@ -57,8 +59,9 @@ class ReactClickableSpan extends ClickableSpan implements ReactSpan {
 
   @Override
   public void updateDrawState(@NonNull TextPaint ds) {
-    // no-op to make sure we don't change the link color or add an underline by default, as the
-    // superclass does.
+    super.updateDrawState(ds);
+    ds.setColor(mForegroundColor);
+    ds.setUnderlineText(false);
   }
 
   public int getReactTag() {

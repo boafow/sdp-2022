@@ -55,7 +55,7 @@ public class LogBoxDialogSurfaceDelegate implements SurfaceDelegate {
 
   @Override
   public void show() {
-    if (isShowing() || !isContentViewReady()) {
+    if (isSurfaceVisible() || !isContentViewReady()) {
       return;
     }
 
@@ -74,7 +74,7 @@ public class LogBoxDialogSurfaceDelegate implements SurfaceDelegate {
 
   @Override
   public void hide() {
-    if (!isShowing()) {
+    if (!isSurfaceVisible()) {
       return;
     }
 
@@ -86,8 +86,7 @@ public class LogBoxDialogSurfaceDelegate implements SurfaceDelegate {
     mDialog = null;
   }
 
-  @Override
-  public boolean isShowing() {
-    return mDialog != null && mDialog.isShowing();
+  private boolean isSurfaceVisible() {
+    return mDialog != null;
   }
 }

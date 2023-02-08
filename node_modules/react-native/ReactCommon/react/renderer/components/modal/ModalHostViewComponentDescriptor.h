@@ -15,7 +15,7 @@ namespace facebook {
 namespace react {
 
 /*
- * Descriptor for <ModalHostView> component.
+ * Descriptor for <BottomSheet> component.
  */
 
 class ModalHostViewComponentDescriptor final

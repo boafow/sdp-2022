@@ -8,7 +8,6 @@
 #import <ComponentKit/CKComponent.h>
 #import <ComponentKit/CKCompositeComponent.h>
 #import <RCTSurfaceHostingComponent/RCTSurfaceHostingComponentOptions.h>
-#import <React/RCTSurfacePresenter.h>
 
 @class RCTBridge;
 
@@ -20,7 +19,6 @@
 @interface RCTSurfaceBackedComponent : CKCompositeComponent
 
 + (instancetype)newWithBridge:(RCTBridge *)bridge
-             surfacePresenter:(RCTSurfacePresenter *)surfacePresenter
                    moduleName:(NSString *)moduleName
                    properties:(NSDictionary *)properties
                       options:(RCTSurfaceHostingComponentOptions)options;

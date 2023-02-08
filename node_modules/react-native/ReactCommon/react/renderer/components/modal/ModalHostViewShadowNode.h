@@ -18,7 +18,7 @@ namespace react {
 extern const char ModalHostViewComponentName[];
 
 /*
- * `ShadowNode` for <ModalHostView> component.
+ * `ShadowNode` for <Slider> component.
  */
 class ModalHostViewShadowNode final : public ConcreteViewShadowNode<
                                           ModalHostViewComponentName,

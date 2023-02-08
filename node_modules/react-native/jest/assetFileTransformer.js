@@ -20,13 +20,12 @@ module.exports = {
   // the correct images are loaded for components. Essentially
   // require('img1.png') becomes `Object { "testUri": 'path/to/img1.png' }` in
   // the Jest snapshot.
-  process: (_, filename) => ({
-    code: `module.exports = {
+  process: (_, filename) =>
+    `module.exports = {
       testUri:
         ${JSON.stringify(
           path.relative(__dirname, filename).replace(/\\/g, '/'),
         )}
     };`,
-  }),
   getCacheKey: createCacheKeyFunction([__filename]),
 };

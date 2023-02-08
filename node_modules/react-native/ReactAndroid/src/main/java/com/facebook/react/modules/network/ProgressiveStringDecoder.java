@@ -58,20 +58,20 @@ public class ProgressiveStringDecoder {
     ByteBuffer decodeBuffer = ByteBuffer.wrap(decodeData, 0, length);
     CharBuffer result = null;
     boolean decoded = false;
-    int remainderLength = 0;
-    while (!decoded && (remainderLength < 4)) {
+    int remainderLenght = 0;
+    while (!decoded && (remainderLenght < 4)) {
       try {
         result = mDecoder.decode(decodeBuffer);
         decoded = true;
       } catch (CharacterCodingException e) {
-        remainderLength++;
-        decodeBuffer = ByteBuffer.wrap(decodeData, 0, length - remainderLength);
+        remainderLenght++;
+        decodeBuffer = ByteBuffer.wrap(decodeData, 0, length - remainderLenght);
       }
     }
-    boolean hasRemainder = decoded && remainderLength > 0;
+    boolean hasRemainder = decoded && remainderLenght > 0;
     if (hasRemainder) {
-      remainder = new byte[remainderLength];
-      System.arraycopy(decodeData, length - remainderLength, remainder, 0, remainderLength);
+      remainder = new byte[remainderLenght];
+      System.arraycopy(decodeData, length - remainderLenght, remainder, 0, remainderLenght);
     } else {
       remainder = null;
     }

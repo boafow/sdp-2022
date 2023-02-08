@@ -65,7 +65,7 @@ class MountingTransaction final {
   /*
    * Returns telemetry associated with this transaction.
    */
-  TransactionTelemetry &getTelemetry() const;
+  TransactionTelemetry const &getTelemetry() const;
 
   /*
    * Returns the id of the surface that the transaction belongs to.
@@ -81,7 +81,7 @@ class MountingTransaction final {
   SurfaceId surfaceId_;
   Number number_;
   ShadowViewMutationList mutations_;
-  mutable TransactionTelemetry telemetry_;
+  TransactionTelemetry telemetry_;
 };
 
 } // namespace react
