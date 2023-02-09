@@ -7,7 +7,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { Entypo } from '@expo/vector-icons';
 
 
-export default Cam = () => {
+export default PhoneCamera = () => {
   let cameraRef = useRef();
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
