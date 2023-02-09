@@ -1,17 +1,14 @@
 import { React } from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { StyleSheet, View } from 'react-native';
 import Amplify from 'aws-amplify';
 import PhoneCamera from './src/components/PhoneCamera';
 
 export default App = () => {
 
   return (
-    <NavigationContainer>
-      <View style={styles.container}>
-        <PhoneCamera />
-      </View>
-    </NavigationContainer>
+    <View style={styles.container}>
+      <PhoneCamera />
+    </View>
   );
 }
 
