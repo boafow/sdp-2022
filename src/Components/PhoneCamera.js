@@ -9,7 +9,7 @@ import { Entypo, Feather } from '@expo/vector-icons';
 import { Storage } from 'aws-amplify';
 
 
-export default Cam = () => {
+export default PhoneCamera = () => {
   const generatePictureKey = () => {
     const timestamp = Date.now();
     const randomNumber = Math.floor(Math.random() * 1000000);
