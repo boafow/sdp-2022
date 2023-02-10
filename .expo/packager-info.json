@@ -2,8 +2,8 @@
   "expoServerPort": 19000,
   "packagerPort": 19000,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://4s-squ.anonymous.sdp-2022.exp.direct",
+  "packagerNgrokUrl": "https://4s-squ.anonymous.sdp-2022.exp.direct",
+  "ngrokPid": 20088,
   "webpackServerPort": null
 }

@@ -1,26 +1,31 @@
 import { React } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Amplify from 'aws-amplify';
-import PhoneCamera from './src/components/PhoneCamera';
+
+import CameraPage from './src/pages/CameraPage';
+import LoginPage from './src/pages/LoginPage';
+import HomePage from './src/pages/HomePage';
+
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+
+
+
+const Tab = createMaterialBottomTabNavigator();
 
 export default App = () => {
 
   return (
-    <View style={styles.container}>
-      <PhoneCamera />
-    </View>
+    <NavigationContainer>
+        <Tab.Navigator 
+        initialRouteName='LoginPage'
+        activeColor='#f0edf6'
+        inactiveColor='#3e2465'
+        >
+          <Tab.Screen name="LoginPage" component={LoginPage} />
+          <Tab.Screen name="CameraPage" component={CameraPage} />
+          <Tab.Screen name="HomePage" component={HomePage} />
+        </Tab.Navigator>
+    </NavigationContainer>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#191970',
-    justifyContent: 'center',
-  },
-  camera: {
-    flex: 1,
-    borderRadius: 20,
-
-  }
-});
+};
