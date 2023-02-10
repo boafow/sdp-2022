@@ -27,7 +27,6 @@ const LoginPage = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
