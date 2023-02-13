@@ -1,4 +1,0 @@
-import { Paginator } from "@aws-sdk/types";
-import { ListDevicePositionsCommandInput, ListDevicePositionsCommandOutput } from "../commands/ListDevicePositionsCommand";
-import { LocationPaginationConfiguration } from "./Interfaces";
-export declare function paginateListDevicePositions(config: LocationPaginationConfiguration, input: ListDevicePositionsCommandInput, ...additionalArguments: any): Paginator<ListDevicePositionsCommandOutput>;
