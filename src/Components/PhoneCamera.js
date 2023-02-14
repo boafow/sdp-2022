@@ -17,7 +17,7 @@ export default PhoneCamera = () => {
   };
   const uploadPicture = async ( picture ) => {
     const key = generatePictureKey();
-  
+    console.log("Pic: " + picture);
     try {
       const result = await Storage.put(key, picture, {
         contentType: 'image/jpeg'
@@ -29,8 +29,9 @@ export default PhoneCamera = () => {
       throw error;
     }
   };
+  
   const pickImage = async () => {
-    const { granted } = await ImagePicker.requestCameraRollPermissionsAsync();
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!granted) {
       return;
     }
