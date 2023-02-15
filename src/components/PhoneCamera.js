@@ -10,8 +10,6 @@ import { Storage } from 'aws-amplify';
 
 
 export default PhoneCamera = () => {
-<<<<<<<< HEAD:src/components/PhoneCamera.js
-========
   const generatePictureKey = () => {
     const timestamp = Date.now();
     const randomNumber = Math.floor(Math.random() * 1000000);
@@ -50,7 +48,6 @@ export default PhoneCamera = () => {
     }
   };
   
->>>>>>>> ali_dev:src/Components/PhoneCamera.js
   let cameraRef = useRef();
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
