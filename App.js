@@ -1,5 +1,6 @@
 import { React } from 'react';
 import { StyleSheet, View } from 'react-native';
+<<<<<<< HEAD
 import Amplify from 'aws-amplify';
 
 import CameraPage from './src/pages/CameraPage';
@@ -15,6 +16,21 @@ const Tab = createMaterialBottomTabNavigator();
 
 export default App = () => {
 
+=======
+import CameraPage from './src/pages/CameraPage';
+import LoginPage from './src/pages/LoginPage';
+import HomePage from './src/pages/HomePage';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { Amplify } from 'aws-amplify'
+import awsconfig from './src/aws-exports'
+
+Amplify.configure(awsconfig)
+const Tab = createMaterialBottomTabNavigator();
+
+export default App = () => {
+  
+>>>>>>> ali_dev
   return (
     <NavigationContainer>
         <Tab.Navigator 
