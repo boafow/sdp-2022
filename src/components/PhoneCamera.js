@@ -4,10 +4,50 @@ import { useEffect, useRef, useState } from 'react';
 import { Camera } from 'expo-camera';
 import { shareAsync } from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
-import { Entypo } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import { Entypo, Feather } from '@expo/vector-icons';
+import { Storage } from 'aws-amplify';
 
 
 export default PhoneCamera = () => {
+  const generatePictureKey = () => {
+    const timestamp = Date.now();
+    const randomNumber = Math.floor(Math.random() * 1000000);
+    return `${timestamp}-${randomNumber}.jpeg`;
+  };
+  const uploadPicture = async ( picture ) => {
+    const key = generatePictureKey();
+    console.log("Pic: " + picture);
+    try {
+      const result = await Storage.put(key, picture, {
+        contentType: 'image/jpeg'
+      });
+      console.log(result);
+      return result.key;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
+  
+  const pickImage = async () => {
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!granted) {
+      return;
+    }
+  
+    const picture = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    });
+    if (!picture.cancelled) {
+      const asset = await MediaLibrary.createAssetAsync(picture.uri );
+      const fileUri = asset.uri;
+  
+      const uploadedPictureKey = await uploadPicture(fileUri);
+      console.log(`The picture was uploaded with the key: ${uploadedPictureKey}`);
+    }
+  };
+  
   let cameraRef = useRef();
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
@@ -65,8 +105,12 @@ export default PhoneCamera = () => {
   return (
     <Camera style={styles.container} ref={cameraRef}>
       <View style={styles.buttonContainer}>
+        <Feather style={styles.uploadButton} name="upload" size={60} color="white" onPress={pickImage}/>
         <Entypo name="circle" size={60} color="white" onPress={takePic}/>
       </View>
+      <View
+        style={styles.uploadButton}
+        ></View>
       
       <StatusBar style="auto" />
     </Camera>
@@ -76,23 +120,25 @@ export default PhoneCamera = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonContainer: {
     flex: 1,
-    flexDirection: 'row',
-    height: 90,
-    width: 90,
     padding: 10,
     marginBottom: 20,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
   },
   preview: {
     alignSelf: 'stretch',
     flex: 1
   },
+  uploadButton:{
+    backgroundColor: 'green',
+    alignSelf: 'flex-end'
+  }
   
 });
