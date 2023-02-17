@@ -27,13 +27,13 @@ const FoodLogScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5DC',
-    paddingHorizontal: 20,
-    paddingTop: 30,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 4,
+    paddingTop: 50,
   },
   scrollingPart: {
     flex: 1,
-    backgroundColor: 'pink'
+    //backgroundColor: 'pink'
   }
 });
 

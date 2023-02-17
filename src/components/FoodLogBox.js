@@ -7,7 +7,7 @@ const FoodLogBox = (props) => {
   const [views, setViews] = useState([]);
   const handleButtonPress = () => {
     const newView = (
-        <Text key={views.length} style={styles.text}>Testing text updating</Text>
+        <Text key={views.length} style={styles.logText}>Testing text updating</Text>
       
     );
     setViews([...views, newView]);
@@ -21,7 +21,7 @@ const FoodLogBox = (props) => {
   return(
     <View style={styles.mealLogBox}>
       <View style={styles.titleBlock}>
-        <Text style={ {padding: 5,fontWeight: 'bold', color:'black'} }>{props.mealType}</Text>
+        <Text style={ {padding: 5,fontWeight: 'bold', color:'#52BB40'} }>{props.mealType}</Text>
       </View>
       <View style={styles.container}>
         {views.map((text, index) => (
@@ -44,8 +44,8 @@ const FoodLogBox = (props) => {
       </View>
       <View style={styles.add}>
         <Button style={{height:40}} onPress={handleButtonPress}>
-          <Text style={{paddingTop: 2, paddingRight: 5}}>Add {props.mealType} </Text>
-          <Entypo style = {{}}name="camera" size={24} color="black" />
+          <Text style={styles.text}>Add {props.mealType} </Text>
+          <Entypo style = {{color: '#FA9800'}}name="camera" size={24} color="black" />
         </Button>
           
       </View>
@@ -55,18 +55,23 @@ const FoodLogBox = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5DC',
+    backgroundColor: '#FFFF',
     paddingHorizontal: 10,
     paddingTop: 10,
   },
   mealLogBox: {
     flexDirection: 'column',
-    minHeight: 140,
-    marginVertical: 10,
-    backgroundColor:'#F5F5DC',
+    shadowColor: '#001',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: .25,
+    shadowRadius: 5,
+    elevation: 1,
+    minHeight: 180,
+    marginVertical: 2,
+    backgroundColor:'#FFFFFF',
     borderRadius: 10,
-    shadowColor: 'grey',
-    borderWidth: 1,
+    shadowColor: '#52BB40',
+    borderWidth: .2,
     borderColor: 'grey'
   },
   insideBox: {
@@ -83,12 +88,14 @@ const styles = StyleSheet.create({
   logText:{
     flex: 1,
     margin: 4,
-    marginLeft: 15,
+  
+    color: '#0080C9'
 
   },
   text: {
-    width: 200,
-    flexWrap: 'wrap',
+    paddingTop: 2, 
+    paddingRight: 5,
+    color: '#FA9800'
     //textAlign: 'center',
   },
   foodItemText: {
