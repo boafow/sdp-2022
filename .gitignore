@@ -35,6 +35,9 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 .expo/
+.vscode
+amplify/
+package-lock.json
 .expo-shared/
-.vscode/
+
 #amplify-do-not-edit-end

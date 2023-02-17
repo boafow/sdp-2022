@@ -4,31 +4,32 @@ import CircularProgress from 'react-native-circular-progress-indicator';
 export default Card = (props) => {
   return (
     <View style={styles.container}>
-      <Text>{props.name}</Text>
+      <Text style= {{color: '#0080C9'}}>{props.name}</Text>
       <CircularProgress
         radius={90}
         value={(props.currValue / props.targetValue) * 100}
-        textColor='#222'
+        textColor='#52BB40'
         fontSize={20}
         valueSuffix={'%'}
-        inActiveStrokeColor={'#2ecc71'}
+        activeStrokeColor={'#52BB40'}
+        inActiveStrokeColor={'#FA9800'}
         inActiveStrokeOpacity={0.2}
         inActiveStrokeWidth={6}
         duration={3000}
         onAnimationComplete={() => props.targetValue - props.currValue}
       />
-      <Text>remaining: {props.targetValue - props.currValue} {props.units}</Text>
+      <Text style={{color: '#0080C9'}}>Remaining: {props.targetValue - props.currValue} {props.units}</Text>
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#008080',
+    backgroundColor: '#FFFFFF' ,
     borderRadius: 5,
-    shadowColor: '#001',
+    shadowColor: '#52BB40',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
+    shadowOpacity: 0.25,
+    shadowRadius: .5,
     elevation: 1,
     marginLeft: 5,
     marginRight: 5,
