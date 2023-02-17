@@ -37,5 +37,6 @@ amplifytools.xcconfig
 .vscode
 amplify/
 package-lock.json
+.expo-shared/
 
 #amplify-do-not-edit-end
