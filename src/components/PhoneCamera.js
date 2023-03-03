@@ -10,6 +10,33 @@ import { Storage } from 'aws-amplify';
 
 
 export default PhoneCamera = () => {
+  /*
+  textract code start
+  */
+ const extract = () => {
+  var textract = new AWS.Textract({ region: 'us-east-1' });
+  const params = {
+    Document: {
+      s3object: {
+        Bucket: 'neil-thakur-test-bucket',
+        Name: 'S7 Class Schedule.png'
+      }
+    }
+  };
+  //FeatureTypes: ['TABLES', 'FORMS',
+  console.log ("NEIL-3")
+  textract.detectDocumentText (params, (err, data) => {
+    if(err) {
+      console. log('Error', err);
+    } else {
+      console. log ('Text detected:', data.Blocks. map (block => block. Text). join('\n')) ;
+  }});
+ }
+
+  
+ 
+
+
   const generatePictureKey = () => {
     const timestamp = Date.now();
     const randomNumber = Math.floor(Math.random() * 1000000);
@@ -34,6 +61,7 @@ export default PhoneCamera = () => {
       console.error(error);
       throw error;
     }
+    extract()
   };
   
   const pickImage = async () => {

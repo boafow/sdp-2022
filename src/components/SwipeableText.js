@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Swipeable from 'react-native-swipeable';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 function SwipeableText({ text, onDelete }) {
   const [swipeable, setSwipeable] = useState(null);
