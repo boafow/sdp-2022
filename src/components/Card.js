@@ -6,7 +6,7 @@ export default Card = (props) => {
     <View style={styles.container}>
       <Text style= {{color: '#0080C9'}}>{props.name}</Text>
       <CircularProgress
-        radius={90}
+        radius={100}
         value={(props.currValue / props.targetValue) * 100}
         textColor='#52BB40'
         fontSize={20}

@@ -10,16 +10,49 @@ import { Storage } from 'aws-amplify';
 
 
 export default PhoneCamera = () => {
+  /*
+  textract code start
+  */
+ const extract = () => {
+  var textract = new AWS.Textract({ region: 'us-east-1' });
+  const params = {
+    Document: {
+      s3object: {
+        Bucket: 'neil-thakur-test-bucket',
+        Name: 'S7 Class Schedule.png'
+      }
+    }
+  };
+  //FeatureTypes: ['TABLES', 'FORMS',
+  console.log ("NEIL-3")
+  textract.detectDocumentText (params, (err, data) => {
+    if(err) {
+      console. log('Error', err);
+    } else {
+      console. log ('Text detected:', data.Blocks. map (block => block. Text). join('\n')) ;
+  }});
+ }
+
+  
+ 
+
+
   const generatePictureKey = () => {
     const timestamp = Date.now();
     const randomNumber = Math.floor(Math.random() * 1000000);
     return `${timestamp}-${randomNumber}.jpeg`;
   };
-  const uploadPicture = async ( picture ) => {
+  const fetchImageFromUri = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    return blob;
+  };
+  const uploadPicture = async ( uri ) => {
     const key = generatePictureKey();
-    console.log("Pic: " + picture);
+    console.log("PicUri: " + uri);
+    const img = await fetchImageFromUri(uri);
     try {
-      const result = await Storage.put(key, picture, {
+      const result = await Storage.put(key, img, {
         contentType: 'image/jpeg'
       });
       console.log(result);
@@ -28,6 +61,7 @@ export default PhoneCamera = () => {
       console.error(error);
       throw error;
     }
+    extract()
   };
   
   const pickImage = async () => {
@@ -35,13 +69,12 @@ export default PhoneCamera = () => {
     if (!granted) {
       return;
     }
-  
-    const picture = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    });
+  // {mediaTypes: ImagePicker.MediaTypeOptions.Images,}
+    const picture = await ImagePicker.launchImageLibraryAsync();
     if (!picture.cancelled) {
-      const asset = await MediaLibrary.createAssetAsync(picture.uri );
-      const fileUri = asset.uri;
+      //const asset = await MediaLibrary.createAssetAsync(picture.uri );
+      //const fileUri = asset.uri;
+      const fileUri = picture.uri;
   
       const uploadedPictureKey = await uploadPicture(fileUri);
       console.log(`The picture was uploaded with the key: ${uploadedPictureKey}`);
@@ -49,7 +82,7 @@ export default PhoneCamera = () => {
   };
   
   let cameraRef = useRef();
-  const [hasCameraPermission, setHasCameraPermission] = useState();
+  const [hasCameraPermission, setHasCameraPermission] = useState();  
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [photo, setPhoto] = useState();
 
@@ -85,12 +118,13 @@ export default PhoneCamera = () => {
         setPhoto(undefined);
       });
     };
-
+    
     let savePhoto = () => {
       MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
         setPhoto(undefined);
       });
     };
+    
 
     return (
       <SafeAreaView style={styles.container}>
@@ -115,7 +149,7 @@ export default PhoneCamera = () => {
       <StatusBar style="auto" />
     </Camera>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
