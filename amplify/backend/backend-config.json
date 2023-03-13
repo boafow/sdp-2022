@@ -54,13 +54,13 @@
     "pictures": {
       "dependsOn": [
         {
+          "category": "function",
+          "resourceName": "S3Triggere1ce2aa9",
           "attributes": [
             "Name",
             "Arn",
             "LambdaExecutionRole"
-          ],
-          "category": "function",
-          "resourceName": "S3Triggere1ce2aa9"
+          ]
         }
       ],
       "providerPlugin": "awscloudformation",

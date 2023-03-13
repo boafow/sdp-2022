@@ -21,7 +21,7 @@
       "function": {
         "S3Triggere1ce2aa9": {
           "deploymentBucketName": "amplify-sdp-testing-231615-deployment",
-          "s3Key": "amplify-builds/S3Triggere1ce2aa9-6543652f786557655254-build.zip"
+          "s3Key": "amplify-builds/S3Triggere1ce2aa9-425a59797238332b644a-build.zip"
         }
       }
     }

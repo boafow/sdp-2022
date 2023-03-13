@@ -18,7 +18,6 @@ amplify/\#current-cloud-backend
 amplify/.config/local-*
 amplify/logs
 amplify/mock-data
-amplify/mock-api-resources
 amplify/backend/amplify-meta.json
 amplify/backend/.temp
 build/
@@ -33,7 +32,4 @@ amplify-gradle-config.json
 amplifytools.xcconfig
 .secret-*
 **.sample
-.expo/
-.expo-shared/
-.vscode/
 #amplify-do-not-edit-end
