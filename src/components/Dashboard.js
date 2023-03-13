@@ -24,36 +24,21 @@ const Dashboard = () => {
          macros ? (
         <ScrollView style={styles.container}>
             <Card 
-                name={"Calories"}
-                currValue={macros.calories}
-                targetValue={macros.caloriesGoal}
-                units={"cals"}
-            /> 
-            <Card 
-                name={"Carbs"}
-                currValue={macros.carbohydrates}
-                targetValue={macros.carbohydratesGoal}
-                units={"g"}
-            /> 
-            <Card
-                name={"Protein"}
-                currValue={macros.protein}
-                targetValue={macros.proteinGoal}
-                units={"g"}
-            /> 
-            <Card 
-                name={"Fats"}
-                currValue={macros.fats}
-                targetValue={macros.fatsGoal}
-                units={"g"}
-            /> 
+                calValue={macros.calories}
+                calTargetValue={macros.caloriesGoal}
+                carbValue={macros.carbohydrates}
+                carbTargetValue={macros.carbohydratesGoal}
+                proteinValue={macros.protein}
+                proteinTargetValue={macros.proteinGoal}
+                fatValue={macros.fats}
+                fatTargetValue={macros.fatsGoal}
+            />
         </ScrollView>
          ) : (<Text>Loading...</Text>)
     ); 
 };
 const styles = StyleSheet.create({
     container: {
-      backgroundColor: '#FFFFFF',
       marginLeft: 5,
       marginRight: 5,
       marginTop: 50,
