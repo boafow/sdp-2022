@@ -1,16 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Modal } from 'react-native';
 import CircularProgress, { CircularProgressBase } from 'react-native-circular-progress-indicator';
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default Card = (props) => {
+export default NutrientCircles = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [macroType, setMacroType] = useState('');
   const [macrosEaten, setMacrosEaten] = useState(0);
   const [macroGoal, setMacroGoal] = useState(0);
-
   const percentage = macrosEaten / macroGoal * 100;
+  const [macros, setMacros] = useState(null)
+  const apiUrl = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getDashboardValues';
+  
+  const viewParam = 'dashboard'; // replace this with your actual view parameter value
+  const urlWithQueryParams = `${apiUrl}?view=${viewParam}`;
+  useEffect(() => {
+    fetch(urlWithQueryParams)
+      .then((response) => response.json())
+      .then((object) => {
+        setMacros(object.data)
+        console.log('Response:', object);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }, []);
+
+  if (macros == null) {
+    return <Text>Loading...</Text>
+  }
+  const calValue = macros.calories;
+  const calTargetValue = macros.caloriesGoal;
+  const carbValue = macros.carbohydrates;
+  const carbTargetValue = macros.carbohydratesGoal;
+  const proteinValue = macros.protein;
+  const proteinTargetValue = macros.proteinGoal;
+  const fatValue = macros.fats;
+  const fatTargetValue = macros.fatsGoal;
 
   return (
     <View style={styles.container}>
@@ -20,7 +46,7 @@ export default Card = (props) => {
           activeStrokeWidth={25}
           inActiveStrokeWidth={25}
           inActiveStrokeOpacity={0.2}
-          value={(props.calValue / props.calTargetValue) * 100}
+          value={( calValue /  calTargetValue) * 100}
           radius={125}
           activeStrokeColor={'#efad32'}
           inActiveStrokeColor={'#efad32'}>
@@ -29,7 +55,7 @@ export default Card = (props) => {
             activeStrokeWidth={25}
             inActiveStrokeWidth={25}
             inActiveStrokeOpacity={0.2}
-            value={(props.carbValue / props.carbTargetValue) * 100}
+            value={( carbValue /  carbTargetValue) * 100}
             radius={100}
             activeStrokeColor={'#55ba45'}
             inActiveStrokeColor={'#55ba45'}>
@@ -38,7 +64,7 @@ export default Card = (props) => {
               activeStrokeWidth={25}
               inActiveStrokeWidth={25}
               inActiveStrokeOpacity={0.2}
-              value={(props.proteinValue / props.proteinTargetValue) * 100}
+              value={( proteinValue /  proteinTargetValue) * 100}
               radius={75}
               activeStrokeColor={'#0295d1'}
               inActiveStrokeColor={'#0295d1'}>
@@ -47,7 +73,7 @@ export default Card = (props) => {
                 activeStrokeWidth={25}
                 inActiveStrokeWidth={25}
                 inActiveStrokeOpacity={0.2}
-                value={(props.fatValue / props.fatTargetValue) * 100}
+                value={( fatValue /  fatTargetValue) * 100}
                 radius={50}
                 activeStrokeColor={'#18dcff'}
                 inActiveStrokeColor={'#18dcff'} />
@@ -62,8 +88,8 @@ export default Card = (props) => {
           onPress={() => {
             setModalVisible(true);
             setMacroType('calories');
-            setMacrosEaten(props.calValue);
-            setMacroGoal(props.calTargetValue);
+            setMacrosEaten( calValue);
+            setMacroGoal( calTargetValue);
           }}>
           <Text style={styles.buttonText}>Calories</Text>
         </TouchableOpacity>
@@ -73,8 +99,8 @@ export default Card = (props) => {
           onPress={() => {
             setModalVisible(true);
             setMacroType('carbs');
-            setMacrosEaten(props.carbValue);
-            setMacroGoal(props.carbTargetValue);
+            setMacrosEaten( carbValue);
+            setMacroGoal( carbTargetValue);
           }}>
           <Text style={styles.buttonText}>Carbs</Text>
         </TouchableOpacity>
@@ -84,8 +110,8 @@ export default Card = (props) => {
           onPress={() => {
             setModalVisible(true);
             setMacroType('proteins');
-            setMacrosEaten(props.proteinValue);
-            setMacroGoal(props.proteinTargetValue);
+            setMacrosEaten( proteinValue);
+            setMacroGoal( proteinTargetValue);
           }}>
           <Text style={styles.buttonText}>Proteins</Text>
         </TouchableOpacity>
@@ -95,8 +121,8 @@ export default Card = (props) => {
           onPress={() => {
             setModalVisible(true);
             setMacroType('fats');
-            setMacrosEaten(props.fatValue);
-            setMacroGoal(props.fatTargetValue);
+            setMacrosEaten( fatValue);
+            setMacroGoal( fatTargetValue);
           }}>
           <Text style={styles.buttonText}>Fats</Text>
         </TouchableOpacity>
