@@ -17,7 +17,6 @@ export default Recommendations = (props) => {
             let response = await fetch(urlWithQueryParams);
             let json = await response.json();
             setResData(json);
-            console.log(json);
         } catch (error) {
             console.error(error);
         }

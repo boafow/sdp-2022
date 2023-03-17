@@ -10,10 +10,10 @@ export default NutrientCircles = (props) => {
   const [macroGoal, setMacroGoal] = useState(0);
   const percentage = macrosEaten / macroGoal * 100;
   const [macros, setMacros] = useState(null)
+
   const apiUrl = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getDashboardValues';
-  
-  const viewParam = 'dashboard'; // replace this with your actual view parameter value
-  const urlWithQueryParams = `${apiUrl}?view=${viewParam}`;
+  const user_id = 'rbrown'
+  const urlWithQueryParams = `${apiUrl}?user_id=${user_id}`;
   useEffect(() => {
     fetch(urlWithQueryParams)
       .then((response) => response.json())
@@ -46,7 +46,7 @@ export default NutrientCircles = (props) => {
           activeStrokeWidth={25}
           inActiveStrokeWidth={25}
           inActiveStrokeOpacity={0.2}
-          value={( calValue /  calTargetValue) * 100}
+          value={(calValue / calTargetValue) * 100}
           radius={125}
           activeStrokeColor={'#efad32'}
           inActiveStrokeColor={'#efad32'}>
@@ -55,7 +55,7 @@ export default NutrientCircles = (props) => {
             activeStrokeWidth={25}
             inActiveStrokeWidth={25}
             inActiveStrokeOpacity={0.2}
-            value={( carbValue /  carbTargetValue) * 100}
+            value={(carbValue / carbTargetValue) * 100}
             radius={100}
             activeStrokeColor={'#55ba45'}
             inActiveStrokeColor={'#55ba45'}>
@@ -64,7 +64,7 @@ export default NutrientCircles = (props) => {
               activeStrokeWidth={25}
               inActiveStrokeWidth={25}
               inActiveStrokeOpacity={0.2}
-              value={( proteinValue /  proteinTargetValue) * 100}
+              value={(proteinValue / proteinTargetValue) * 100}
               radius={75}
               activeStrokeColor={'#0295d1'}
               inActiveStrokeColor={'#0295d1'}>
@@ -73,7 +73,7 @@ export default NutrientCircles = (props) => {
                 activeStrokeWidth={25}
                 inActiveStrokeWidth={25}
                 inActiveStrokeOpacity={0.2}
-                value={( fatValue /  fatTargetValue) * 100}
+                value={(fatValue / fatTargetValue) * 100}
                 radius={50}
                 activeStrokeColor={'#18dcff'}
                 inActiveStrokeColor={'#18dcff'} />
@@ -88,8 +88,8 @@ export default NutrientCircles = (props) => {
           onPress={() => {
             setModalVisible(true);
             setMacroType('calories');
-            setMacrosEaten( calValue);
-            setMacroGoal( calTargetValue);
+            setMacrosEaten(calValue);
+            setMacroGoal(calTargetValue);
           }}>
           <Text style={styles.buttonText}>Calories</Text>
         </TouchableOpacity>
@@ -99,8 +99,8 @@ export default NutrientCircles = (props) => {
           onPress={() => {
             setModalVisible(true);
             setMacroType('carbs');
-            setMacrosEaten( carbValue);
-            setMacroGoal( carbTargetValue);
+            setMacrosEaten(carbValue);
+            setMacroGoal(carbTargetValue);
           }}>
           <Text style={styles.buttonText}>Carbs</Text>
         </TouchableOpacity>
@@ -110,8 +110,8 @@ export default NutrientCircles = (props) => {
           onPress={() => {
             setModalVisible(true);
             setMacroType('proteins');
-            setMacrosEaten( proteinValue);
-            setMacroGoal( proteinTargetValue);
+            setMacrosEaten(proteinValue);
+            setMacroGoal(proteinTargetValue);
           }}>
           <Text style={styles.buttonText}>Proteins</Text>
         </TouchableOpacity>
@@ -121,8 +121,8 @@ export default NutrientCircles = (props) => {
           onPress={() => {
             setModalVisible(true);
             setMacroType('fats');
-            setMacrosEaten( fatValue);
-            setMacroGoal( fatTargetValue);
+            setMacrosEaten(fatValue);
+            setMacroGoal(fatTargetValue);
           }}>
           <Text style={styles.buttonText}>Fats</Text>
         </TouchableOpacity>
