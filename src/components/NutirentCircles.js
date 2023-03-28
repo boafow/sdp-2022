@@ -27,7 +27,7 @@ export default NutrientCircles = (props) => {
   }, []);
 
   if (macros == null) {
-    return <Text>Loading...</Text>
+    return <Text>Loading nutrient circles...</Text>
   }
   const calValue = macros.calories;
   const calTargetValue = macros.caloriesGoal;

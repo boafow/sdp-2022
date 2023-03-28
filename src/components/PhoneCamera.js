@@ -1,86 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Button, Image, Alert, TextInput, ScrollView, Keyboard } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { Camera } from 'expo-camera';
 import { shareAsync } from 'expo-sharing';
 import * as MediaLibrary from 'expo-media-library';
 import * as ImagePicker from 'expo-image-picker';
 import { Entypo, Feather } from '@expo/vector-icons';
-import { Storage } from 'aws-amplify';
+import { RNS3 } from 'react-native-aws3';
+import credentials from '../../aws-credentials.json';
+import { getS3FileName, getCurrentDate, getCurrentTime } from './S3DateTimeFunctions';
 
 export default PhoneCamera = () => {
-  /*
-  textract code start
-  */
- const extract = () => {
-  var textract = new AWS.Textract({ region: 'us-east-1' });
-  const params = {
-    Document: {
-      s3object: {
-        Bucket: 'neil-thakur-test-bucket',
-        Name: 'S7 Class Schedule.png'
-      }
-    }
-  };
-  //FeatureTypes: ['TABLES', 'FORMS',
-  console.log ("NEIL-3")
-  textract.detectDocumentText (params, (err, data) => {
-    if(err) {
-      console. log('Error', err);
-    } else {
-      console. log ('Text detected:', data.Blocks. map (block => block. Text). join('\n')) ;
-  }});
- }
-
-  const generatePictureKey = () => {
-    const timestamp = Date.now();
-    const randomNumber = Math.floor(Math.random() * 1000000);
-    return `${timestamp}-${randomNumber}.jpeg`;
-  };
-  const fetchImageFromUri = async (uri) => {
-    const response = await fetch(uri);
-    const blob = await response.blob();
-    return blob;
-  };
-  const uploadPicture = async ( uri ) => {
-    const key = generatePictureKey();
-    console.log("PicUri: " + uri);
-    const img = await fetchImageFromUri(uri);
-    try {
-      const result = await Storage.put(key, img, {
-        contentType: 'image/jpeg'
-      });
-      console.log(result);
-      return result.key;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-    extract()
-  };
-  
-  const pickImage = async () => {
-    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (!granted) {
-      return;
-    }
-  // {mediaTypes: ImagePicker.MediaTypeOptions.Images,}
-    const picture = await ImagePicker.launchImageLibraryAsync();
-    if (!picture.cancelled) {
-      //const asset = await MediaLibrary.createAssetAsync(picture.uri );
-      //const fileUri = asset.uri;
-      const fileUri = picture.uri;
-  
-      const uploadedPictureKey = await uploadPicture(fileUri);
-      console.log(`The picture was uploaded with the key: ${uploadedPictureKey}`);
-    }
-  };
-  
   let cameraRef = useRef();
   const [hasCameraPermission, setHasCameraPermission] = useState();  
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [photo, setPhoto] = useState();
+  const [fileName, setFileName] = useState(null);
+  const [userName, setUserName] = useState('nmt18004');
+  const [textractJSON, setTextractJSON] = useState(null);
 
+  /* react-native hook to get camera permissions */
   useEffect(() => {
     (async () => {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
@@ -90,23 +29,15 @@ export default PhoneCamera = () => {
     })();
   }, []);
 
+  /* shows an error message on screen if camera permissions pending / not granted */
   if (hasCameraPermission === undefined) {
     return <Text>Requesting permissions...</Text>
-  } else if (!hasCameraPermission) {
+  } 
+  else if (!hasCameraPermission) {
     return <Text>Permission for camera not granted. Please change this in settings.</Text>
   }
 
-  let takePic = async () => {
-    let options = {
-      quality: 1,
-      base64: true,
-      exif: false
-    };
-
-    let newPhoto = await cameraRef.current.takePictureAsync(options);
-    setPhoto(newPhoto);
-  };
-
+  /* if photo is taken, display preview + save button + discard button */
   if (photo) {
     let sharePic = () => {
       shareAsync(photo.uri).then(() => {
@@ -119,7 +50,6 @@ export default PhoneCamera = () => {
         setPhoto(undefined);
       });
     };
-    
 
     return (
       <SafeAreaView style={styles.container}>
@@ -131,21 +61,160 @@ export default PhoneCamera = () => {
     );
   }
 
+  /* takes textractJSON and uploads to DynamoDB via API Gateway + Lambda */
+  const saveTextractJSON = async () => {
+    var tmpBody = {
+      'username': userName,
+      'filename': fileName,
+      'date': getCurrentDate(),
+      'time': getCurrentTime(),
+      //'mealDetails': JSON.parse(textractJSON)
+      //'mealDetails': JSON.stringify(textractJSON)
+      'mealDetails': textractJSON
+    }
+    console.log(tmpBody);
+
+    var requestOptions = {
+      method: 'POST',
+      body: JSON.stringify(tmpBody)
+    }
+    console.log('\n');
+    console.log(requestOptions);
+
+    const url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/add';
+    await fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+  }
+  
+  /* if we receive JSON from fetchTextractResults API, render editable text */
+  if (textractJSON) {
+    //const [text, setText] = useState('');
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={{height: '45%', width: '75%'}}>
+          <Text style={{textAlign: 'center'}}>Double tap to edit or close keyboard</Text>
+          <Text style={{textAlign: 'center'}}>---</Text>
+          <ScrollView style={styles.jsonEditor}>
+            <TextInput style={{fontSize: 20}}
+              value={textractJSON}
+              onChangeText={setTextractJSON}
+              multiline={true}
+              onSubmitEditing={() => Keyboard.dismiss()}
+              blurOnSubmit={true}
+              returnKeyType={'done'}
+            />
+          </ScrollView>
+        </View>
+        <Button title="Log to Console" onPress={() => console.log(textractJSON)} />
+        <Button title="Save to Meal History" onPress={saveTextractJSON}/>
+        <Button title="Cancel" onPress={() => setTextractJSON(undefined)} />
+      </SafeAreaView>
+    );
+  }
+
+  /* hardcoded keyPrefix=username */
+  const uploadPictureToS3 = async (tmpURI, tmpFileName) => {
+    const tmpKeyPrefix = userName + '/';
+    const fileName = getS3FileName(tmpFileName);
+
+    const options = {
+      keyPrefix: tmpKeyPrefix,
+      bucket: credentials.bucket,
+      region: credentials.region,
+      accessKey: credentials.accessKeyId,
+      secretKey: credentials.secretAccessKey,
+      successActionStatus: 200,
+    };
+    const file = {
+      uri: tmpURI,
+      name: fileName,
+      type: 'image/jpeg',
+    };
+    const response = await RNS3.put(file, options).then(response => {
+      if (response.status !== 200) {
+        throw new Error("\nFAILURE: Failed to upload image to S3!");
+      }
+      else {
+        console.log("\nSUCCESS: Successfully uploaded image to S3! \n\tS3 Bucket URL: ", response.headers.location);
+      }
+    })
+    .catch(error => { console.log(error) })
+    .progress((e) => console.log('S3 Upload Progress:', (e.loaded / e.total).toLocaleString('en-US', { style: 'percent' })));
+    return fileName;
+  }
+
+  /* linked to circular button */
+  let takePic = async () => {
+    let options = {
+      quality: 1,
+      base64: true,
+      exif: false
+    };
+
+    let newPhoto = await cameraRef.current.takePictureAsync(options);
+    setPhoto(newPhoto);
+  };
+
+  /* linked to upload button; triggers S3 upload via uploadPicture(); fetches Textract result via API */
+  const pickImage = async () => {
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!granted) {
+      return;
+    }
+    const picture = await ImagePicker.launchImageLibraryAsync();
+    
+    if (!picture.cancelled)  {
+      const fileURI = picture.uri;
+      let uploadedPictureKey = '';
+      Alert.prompt('Enter nutrition label name', null, (tmpFileName) => {
+        (async () => {
+          /* upload image to S3 and return file name */
+          uploadedPictureKey = await uploadPictureToS3(fileURI, tmpFileName);
+          setFileName(uploadedPictureKey);
+
+          /* fetches Textract result via API */
+          var requestOptions = {
+            method: 'GET',
+            redirect: 'follow'
+          };
+          const url = `https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getTextractResults?username=${userName}&filename=${uploadedPictureKey}`
+          console.log('\n' + url);
+          await fetch(url, requestOptions)
+          .then(response => response.json())
+          .then(data => {
+            console.log(data); 
+            //setTextractJSON(data); 
+            setTextractJSON(JSON.stringify(data, null, 2));
+          })
+          .catch(error => console.error(error));
+        })();
+      });
+    }
+
+    if (picture.cancelled) {
+      setFileName(null);
+    }
+    
+  };
+
+  /*contains HTML code for camera + circle button + upload button */
   return (
     <Camera style={styles.container} ref={cameraRef}>
       <View style={styles.buttonContainer}>
         <Feather style={styles.uploadButton} name="upload" size={60} color="white" onPress={pickImage}/>
         <Entypo name="circle" size={60} color="white" onPress={takePic}/>
       </View>
-      <View
-        style={styles.uploadButton}
-        ></View>
-      
+      <View style={styles.uploadButton}>
+      </View>
       <StatusBar style="auto" />
     </Camera>
   );
 };
 
+/* stylesheet */
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -168,6 +237,12 @@ const styles = StyleSheet.create({
   uploadButton:{
     alignSelf: 'flex-end',
     paddingRight: 20
+  },
+  jsonEditor: {
+    borderColor: 'black', 
+    borderBottomWidth: 5, 
+    borderTopWidth: 5, 
+    borderLeftWidth: 5, 
+    borderRightWidth: 5
   }
-  
 });

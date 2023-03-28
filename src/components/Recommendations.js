@@ -23,7 +23,7 @@ export default Recommendations = (props) => {
     }
 
     if (!resData) {
-        return <Text>Loading...</Text>
+        return <Text>Loading recommendations...</Text>
     }
 
     //return the recommendations and loop through them displaying their labels
