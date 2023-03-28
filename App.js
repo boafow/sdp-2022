@@ -8,11 +8,7 @@ import ProfilePage from './src/pages/ProfilePage';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationContainer } from '@react-navigation/native';
-import { Amplify } from 'aws-amplify'
-import awsconfig from './src/aws-exports'
 
-
-Amplify.configure(awsconfig);
 const Tab = createMaterialBottomTabNavigator();
 
 export default App = () => {
