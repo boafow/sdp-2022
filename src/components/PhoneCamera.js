@@ -81,7 +81,7 @@ export default PhoneCamera = () => {
     console.log('\n');
     console.log(requestOptions);
 
-    const url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/add';
+    const url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/addMealRecord';
     await fetch(url, requestOptions)
     .then(response => response.json())
     .then(data => console.log(data))
