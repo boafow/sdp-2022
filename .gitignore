@@ -27,10 +27,4 @@ amplify-gradle-config.json
 amplifytools.xcconfig
 .secret-*
 **.sample
-.expo/
-.vscode
-amplify/
-package-lock.json
-.expo-shared/
-
 #amplify-do-not-edit-end

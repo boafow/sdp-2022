@@ -1,0 +1,15 @@
+{
+  "hostType": "tunnel",
+  "lanType": "ip",
+  "dev": true,
+  "minify": false,
+<<<<<<< HEAD:.expo/settings.json
+  "urlRandomness": "4s-squ",
+  "https": false,
+  "scheme": null,
+  "devClient": false
+=======
+  "urlRandomness": null,
+  "https": false
+>>>>>>> ali_dev:src/.expo/settings.json
+}

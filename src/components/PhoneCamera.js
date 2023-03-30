@@ -8,7 +8,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { Entypo, Feather } from '@expo/vector-icons';
 import { Storage } from 'aws-amplify';
 
-
 export default PhoneCamera = () => {
   /*
   textract code start
@@ -32,10 +31,6 @@ export default PhoneCamera = () => {
       console. log ('Text detected:', data.Blocks. map (block => block. Text). join('\n')) ;
   }});
  }
-
-  
- 
-
 
   const generatePictureKey = () => {
     const timestamp = Date.now();
@@ -171,8 +166,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   uploadButton:{
-    backgroundColor: 'green',
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
+    paddingRight: 20
   }
   
 });
