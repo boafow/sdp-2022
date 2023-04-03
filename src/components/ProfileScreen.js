@@ -78,8 +78,10 @@ export default ProfileScreen = () => {
 
     const getBMRCalculations = async () => {
         const totalHeightInches = valueHeightFeet * 12 + valueHeightInches;
+        const totalHeightCentimeters = totalHeightInches * 2.54;
+        const totalWeightKilograms = valueWeight / 2.205;
         const base_url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getBMRCalculations'
-        const params = `?weight=${valueWeight}&height=${totalHeightInches}&age=${valueAge}&gender=${valueGender}&activity=${valueActivity}`;
+        const params = `?weight=${totalWeightKilograms}&height=${totalHeightCentimeters}&age=${valueAge}&gender=${valueGender}&activity=${valueActivity}`;
         const url = base_url + params;
         var requestOptions = {
             method: 'GET',

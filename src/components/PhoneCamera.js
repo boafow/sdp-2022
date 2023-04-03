@@ -84,7 +84,13 @@ export default PhoneCamera = () => {
     const url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/addMealRecord';
     await fetch(url, requestOptions)
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => {
+      console.log(data);
+      const statusCode = data['statusCode'];
+      if(statusCode === 200){
+        setTextractJSON(null);
+      }
+    })
     .catch(error => console.error(error));
   }
   
