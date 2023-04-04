@@ -21,8 +21,13 @@ export default NutrientCircles = (props) => {
     fetch(urlWithQueryParams)
       .then((response) => response.json())
       .then((object) => {
-        setMacros(object.data)
-        console.log('Response:', object);
+        if(object['message'] !== 'Internal server error') {
+          setMacros(object.data)
+          console.log('Response:', object);
+        }
+        else {
+          console.log('NutrientCircles.js: Internal server error with PPHAPI/getDashboardValues')
+        }
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -32,133 +37,135 @@ export default NutrientCircles = (props) => {
   if (macros == null) {
     return <Text>Loading nutrient circles...</Text>
   }
-  const calValue = macros.calories;
-  const calTargetValue = macros.caloriesGoal;
-  const carbValue = macros.carbohydrates;
-  const carbTargetValue = macros.carbohydratesGoal;
-  const proteinValue = macros.protein;
-  const proteinTargetValue = macros.proteinGoal;
-  const fatValue = macros.fats;
-  const fatTargetValue = macros.fatsGoal;
+  else {
+    const calValue = macros.calories;
+    const calTargetValue = macros.caloriesGoal;
+    const carbValue = macros.carbohydrates;
+    const carbTargetValue = macros.carbohydratesGoal;
+    const proteinValue = macros.protein;
+    const proteinTargetValue = macros.proteinGoal;
+    const fatValue = macros.fats;
+    const fatTargetValue = macros.fatsGoal;
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.box1}>
-
-        <CircularProgressBase
-          activeStrokeWidth={25}
-          inActiveStrokeWidth={25}
-          inActiveStrokeOpacity={0.2}
-          value={(calValue / calTargetValue) * 100}
-          radius={125}
-          activeStrokeColor={'#efad32'}
-          inActiveStrokeColor={'#efad32'}>
+    return (
+      <View style={styles.container}>
+        <View style={styles.box1}>
 
           <CircularProgressBase
             activeStrokeWidth={25}
             inActiveStrokeWidth={25}
             inActiveStrokeOpacity={0.2}
-            value={(carbValue / carbTargetValue) * 100}
-            radius={100}
-            activeStrokeColor={'#55ba45'}
-            inActiveStrokeColor={'#55ba45'}>
+            value={(calValue / calTargetValue) * 100}
+            radius={125}
+            activeStrokeColor={'#efad32'}
+            inActiveStrokeColor={'#efad32'}>
 
             <CircularProgressBase
               activeStrokeWidth={25}
               inActiveStrokeWidth={25}
               inActiveStrokeOpacity={0.2}
-              value={(proteinValue / proteinTargetValue) * 100}
-              radius={75}
-              activeStrokeColor={'#0295d1'}
-              inActiveStrokeColor={'#0295d1'}>
+              value={(carbValue / carbTargetValue) * 100}
+              radius={100}
+              activeStrokeColor={'#55ba45'}
+              inActiveStrokeColor={'#55ba45'}>
 
               <CircularProgressBase
                 activeStrokeWidth={25}
                 inActiveStrokeWidth={25}
                 inActiveStrokeOpacity={0.2}
-                value={(fatValue / fatTargetValue) * 100}
-                radius={50}
-                activeStrokeColor={'#18dcff'}
-                inActiveStrokeColor={'#18dcff'} />
+                value={(proteinValue / proteinTargetValue) * 100}
+                radius={75}
+                activeStrokeColor={'#0295d1'}
+                inActiveStrokeColor={'#0295d1'}>
+
+                <CircularProgressBase
+                  activeStrokeWidth={25}
+                  inActiveStrokeWidth={25}
+                  inActiveStrokeOpacity={0.2}
+                  value={(fatValue / fatTargetValue) * 100}
+                  radius={50}
+                  activeStrokeColor={'#18dcff'}
+                  inActiveStrokeColor={'#18dcff'} />
+              </CircularProgressBase>
             </CircularProgressBase>
           </CircularProgressBase>
-        </CircularProgressBase>
-      </View>
-
-      <View style={styles.box2}>
-        <TouchableOpacity
-          style={styles.button1}
-          onPress={() => {
-            setModalVisible(true);
-            setMacroType('calories');
-            setMacrosEaten(calValue);
-            setMacroGoal(calTargetValue);
-          }}>
-          <Text style={styles.buttonText}>Calories</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.button2}
-          onPress={() => {
-            setModalVisible(true);
-            setMacroType('carbs');
-            setMacrosEaten(carbValue);
-            setMacroGoal(carbTargetValue);
-          }}>
-          <Text style={styles.buttonText}>Carbs</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.button3}
-          onPress={() => {
-            setModalVisible(true);
-            setMacroType('proteins');
-            setMacrosEaten(proteinValue);
-            setMacroGoal(proteinTargetValue);
-          }}>
-          <Text style={styles.buttonText}>Proteins</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.button4}
-          onPress={() => {
-            setModalVisible(true);
-            setMacroType('fats');
-            setMacrosEaten(fatValue);
-            setMacroGoal(fatTargetValue);
-          }}>
-          <Text style={styles.buttonText}>Fats</Text>
-        </TouchableOpacity>
-      </View>
-
-      <Modal visible={modalVisible} animationType="none">
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalTitle}>{macroType.toUpperCase()}</Text>
-          <View style={styles.progressContainer}>
-            <CircularProgress
-              radius={125}
-              activeStrokeWidth={25}
-              inActiveStrokeWidth={25}
-              value={percentage}
-              tintColor="#efad32"
-              backgroundColor="#3d5875"
-              onAnimationComplete={() => console.log('onAnimationComplete')}
-              lineCap="round">
-              {() => <Text style={styles.progressText}>{percentage.toFixed(1)}%</Text>}
-            </CircularProgress>
-          </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.infoText}>Macros Eaten: {macrosEaten}g</Text>
-            <Text style={styles.infoText}>Macro Goal: {macroGoal}g</Text>
-            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.closeButtonText}>Close</Text>
-            </TouchableOpacity>
-          </View>
         </View>
-      </Modal>
 
-    </View>
-  );
+        <View style={styles.box2}>
+          <TouchableOpacity
+            style={styles.button1}
+            onPress={() => {
+              setModalVisible(true);
+              setMacroType('calories');
+              setMacrosEaten(calValue);
+              setMacroGoal(calTargetValue);
+            }}>
+            <Text style={styles.buttonText}>Calories</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button2}
+            onPress={() => {
+              setModalVisible(true);
+              setMacroType('carbs');
+              setMacrosEaten(carbValue);
+              setMacroGoal(carbTargetValue);
+            }}>
+            <Text style={styles.buttonText}>Carbs</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button3}
+            onPress={() => {
+              setModalVisible(true);
+              setMacroType('proteins');
+              setMacrosEaten(proteinValue);
+              setMacroGoal(proteinTargetValue);
+            }}>
+            <Text style={styles.buttonText}>Proteins</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button4}
+            onPress={() => {
+              setModalVisible(true);
+              setMacroType('fats');
+              setMacrosEaten(fatValue);
+              setMacroGoal(fatTargetValue);
+            }}>
+            <Text style={styles.buttonText}>Fats</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Modal visible={modalVisible} animationType="none">
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>{macroType.toUpperCase()}</Text>
+            <View style={styles.progressContainer}>
+              <CircularProgress
+                radius={125}
+                activeStrokeWidth={25}
+                inActiveStrokeWidth={25}
+                value={percentage}
+                tintColor="#efad32"
+                backgroundColor="#3d5875"
+                onAnimationComplete={() => console.log('onAnimationComplete')}
+                lineCap="round">
+                {() => <Text style={styles.progressText}>{percentage.toFixed(1)}%</Text>}
+              </CircularProgress>
+            </View>
+            <View style={styles.infoContainer}>
+              <Text style={styles.infoText}>Macros Eaten: {macrosEaten}g</Text>
+              <Text style={styles.infoText}>Macro Goal: {macroGoal}g</Text>
+              <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+                <Text style={styles.closeButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({

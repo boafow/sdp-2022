@@ -60,7 +60,7 @@ const LoginPage = () => {
         /> 
       }
       {valueUsername &&
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={setAllUsernames}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
       }

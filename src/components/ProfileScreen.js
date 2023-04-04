@@ -165,12 +165,16 @@ export default ProfileScreen = () => {
                 placeholder={'Select your activity level'}
             />
             <Text style={styles.text}>Submit Profile</Text>
-            {valueAge && valueHeightFeet && valueHeightInches && valueGender && valueActivity &&
+            {valueAge && valueHeightFeet && valueHeightInches && valueGender && valueActivity ?
                 <Button 
                     title='Calculate Basal Metabolic Rate'
                     onPress={getBMRCalculations}
                 >
                 </Button>
+                :
+                <Text>
+                    Please select values for age, height, weight, gender, and activity level.
+                </Text>
             }
         </SafeAreaView>
     );
