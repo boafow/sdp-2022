@@ -16,7 +16,7 @@ export default App = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName='ProfilePage'
+        initialRouteName='LoginPage'
         activeColor='#f0edf6'
         inactiveColor='#3e2465'>
 

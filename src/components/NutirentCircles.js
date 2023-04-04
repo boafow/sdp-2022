@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Modal } from 'react-native';
 import CircularProgress, { CircularProgressBase } from 'react-native-circular-progress-indicator';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { getGLOBAL_USERNAME } from './GlobalUsername';
 
 export default NutrientCircles = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -12,8 +13,10 @@ export default NutrientCircles = (props) => {
   const [macros, setMacros] = useState(null)
 
   const apiUrl = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getDashboardValues';
-  const user_id = 'rbrown'
+  //const user_id = 'rbrown'
+  const user_id = getGLOBAL_USERNAME();
   const urlWithQueryParams = `${apiUrl}?user_id=${user_id}`;
+  console.log(urlWithQueryParams);
   useEffect(() => {
     fetch(urlWithQueryParams)
       .then((response) => response.json())

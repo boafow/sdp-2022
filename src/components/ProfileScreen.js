@@ -1,5 +1,5 @@
 import { style } from 'deprecated-react-native-prop-types/DeprecatedViewPropTypes';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, SafeAreaView, Button, Alert } from 'react-native';
 //import { Picker } from '@react-native-picker/picker';
 import DropDownPicker from 'react-native-dropdown-picker';

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import { getGLOBAL_USERNAME } from './GlobalUsername';
 
 export default Recommendations = (props) => {
     const apiUrl = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getRecipeRecommendations';
-    const user_id = 'rbrown'
+    //const user_id = 'rbrown'
+    const user_id = getGLOBAL_USERNAME();
     const urlWithQueryParams = `${apiUrl}?user_id=${user_id}`;
     const [resData, setResData] = useState(null)
 
