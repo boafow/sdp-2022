@@ -10,15 +10,8 @@ export default NutrientCircles = (props) => {
   const [macrosEaten, setMacrosEaten] = useState(0);
   const [macroGoal, setMacroGoal] = useState(0);
   const percentage = macrosEaten / macroGoal * 100;
-  // const [macros, setMacros] = useState(null);
   const [macros, setMacros] = useState(props.refreshedData);
 
-  const apiUrl = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getDashboardValues';
-  //const user_id = 'rbrown'
-  const user_id = getGLOBAL_USERNAME();
-  const urlWithQueryParams = `${apiUrl}?user_id=${user_id}`;
-  console.log('NutrientCircles.js', urlWithQueryParams);
-  
   useEffect(() => {
     setMacros(props.refreshedData);
   });
