@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
 import SwipeableText from './SwipeableText';
+import { getGLOBAL_USERNAME } from './GlobalUsername';
 
 const FoodLogBox = (props) => {
   //const [views, setViews] = useState(props.mealArray);
@@ -21,13 +22,15 @@ const FoodLogBox = (props) => {
     setViews(newItems);
   };
 
-  for (let i = 0; i < props.mealArray.length; i++) {
-    props.mealArray[i].id = i;
-    console.log('FoodLogBox.js', props.mealArray[i].filename);
-  }
+  if(props.mealArray) {
+    for (let i = 0; i < props.mealArray.length; i++) {
+      props.mealArray[i].id = i;
+      console.log('FoodLogBox.js', props.mealArray[i].filename);
+    }
 
-  for (let i = 0; i < props.mealArray.length; i++) {
-    console.log('FoodLogBox.js', props.mealArray[i].id);
+    for (let i = 0; i < props.mealArray.length; i++) {
+      console.log('FoodLogBox.js', props.mealArray[i].id);
+    }
   }
 
   return(
@@ -47,9 +50,22 @@ const FoodLogBox = (props) => {
             tension={10} // <-- Adjust the tension to change the stiffness of the spring
           />
         ))} */}
-        {props.mealArray.map((meal) => (
-          <Text key={meal.id}>{meal.filename}</Text>
-        ))}
+        {
+          props.mealArray ? 
+          props.mealArray.map((meal) => 
+            (
+              <View key={meal.id}>
+                <Text>{'Filename: '}{meal.filename}</Text>
+                <Text>{'\t Date: '}{meal.date}</Text>
+                <Text>{'\t Time: '}{meal.time}</Text>
+                <Text>{'\t Meal: '}{meal.mealDetails}</Text>
+                <Text>{'- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'}</Text>
+              </View>
+            )
+          ) 
+          : 
+          <Text>No meals found for {getGLOBAL_USERNAME()}. Swipe down to refresh meal log</Text>
+        }
       </View>
       <View style={styles.logText}>
         <View 

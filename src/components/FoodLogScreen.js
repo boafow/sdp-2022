@@ -2,15 +2,30 @@ import React, { useState } from 'react';
 import { View, ScrollView, StyleSheet, RefreshControl } from 'react-native';
 import FoodLogBox from './FoodLogBox';
 import { getGLOBAL_USERNAME } from './GlobalUsername';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const FoodLogScreen = () => {
+
+  /* HARDCODED TIME RANGE ARRAY */
+  const timeRangeItems = [
+    {label: 'All Time', value: 'all_time'},
+    {label: 'Past 24 Hours', value: 'past_24_hours'},
+    {label: 'Past Week', value: 'past_week'},
+    {label: 'Past Month', value: 'past_month'}
+  ];
+  /* HOOKS FOR TIME RANGE DROPDOWN PICKER */
+  const [openTimeRange, setOpenTimeRange] = useState(false);
+  const [valueTimeRange, setValueTimeRange] = useState(null);
+  const [itemsTimeRange, setItemsTimeRange] = useState(timeRangeItems);
+
+  /* REFRESH STATE + MEAL ARRAY STATE */
   const [refreshing, setRefreshing] = useState(false);
   const [mealArray, setMealArray] = useState(null);
-
   var array_breakfast = [];
   var array_lunch = [];
   var array_dinner = [];
   
+  /* API CALL TO API GATEWAY: getMealRecord */
   const getMealRecord = async () => {
     const apiUrl = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getMealRecord';
     const user_id = getGLOBAL_USERNAME();
@@ -21,8 +36,15 @@ const FoodLogScreen = () => {
       let response = await fetch(urlWithQueryParams);
       let json = await response.json();
       if (json['message'] !== 'Internal server error') {
-        console.log('FoodLogScreen.js', json.mealRecords, '\n');  
-        setMealArray(json.mealRecords);
+        console.log('FoodLogScreen.js', json.mealRecords, '\n');
+        /* API RESPONSE WORKS BUT THERE ARE NO MEAL RECORDS */
+        if(json.mealRecords.length === 0) {
+          setMealArray(null);
+        }  
+        else {
+          setMealArray(json.mealRecords);
+        }
+        /* LOG MEAL RECORDS TO CONSOLE */
         for (let i = 0; i < json.mealRecords.length; i++) {
           console.log('FoodLogScreen.js', json.mealRecords[i].filename);
         }
@@ -48,19 +70,29 @@ const FoodLogScreen = () => {
         style={styles.scrollingPart}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>}
       >
-        <FoodLogBox 
-            mealType="Breakfast"
-            //mealArray={array_breakfast}
-            mealArray={mealArray}
-          />
-          <FoodLogBox 
+        <FoodLogBox
+          mealType="Breakfast"
+          //mealArray={array_breakfast}
+          mealArray={mealArray}
+        />
+        <DropDownPicker
+          open={openTimeRange}
+          value={valueTimeRange}
+          items={itemsTimeRange}
+          setOpen={setOpenTimeRange}
+          setValue={setValueTimeRange}
+          setItems={setItemsTimeRange}
+          maxHeight={175}
+          placeholder={'Select time range for meal log'}
+        />
+          {/* <FoodLogBox 
             mealType="Lunch"
             mealArray={mealArray}
           />
           <FoodLogBox 
             mealType="Dinner"
             mealArray={mealArray}
-          />
+          /> */}
           {/* <FoodLogBox 
           mealType="Snacks"
           /> */}
