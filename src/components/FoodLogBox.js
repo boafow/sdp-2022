@@ -3,6 +3,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
 import SwipeableText from './SwipeableText';
+import { useNavigation } from '@react-navigation/native';
+import CameraPage from '../pages/CameraPage';
 const FoodLogBox = (props) => {
   const [views, setViews] = useState([]);
   const handleButtonPress = () => {
@@ -17,6 +19,7 @@ const FoodLogBox = (props) => {
     newItems.splice(index, 1);
     setViews(newItems);
   };
+  const navigation = useNavigation();
 
   return(
     <View style={styles.mealLogBox}>
@@ -43,7 +46,7 @@ const FoodLogBox = (props) => {
 
       </View>
       <View style={styles.add}>
-        <Button style={{height:40}} onPress={handleButtonPress}>
+        <Button style={{height:40}} onPress={() => navigation.navigate('CameraPage')}>
           <Text style={styles.text}>Add {props.mealType} </Text>
           <Entypo style = {{color: '#FA9800'}}name="camera" size={24} color="black" />
         </Button>

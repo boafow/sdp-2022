@@ -30,7 +30,7 @@ export default Recommendations = (props) => {
     return (
         <View style={styles.container}>
             <Text>Recommendations</Text>
-            {resData.map((item, index) => {
+            {resData && resData.map((item, index) => {
                 return (
                     <View key={index} style={{flexDirection: 'row'}}>
                         <Text style={{flex: '3'}}>{item.recipe.label}</Text>
@@ -40,6 +40,7 @@ export default Recommendations = (props) => {
             })}
         </View>
     );
+    
 }
 
 
