@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { setGLOBAL_USERNAME, getGLOBAL_USERNAME } from './GlobalUsername';
@@ -25,10 +25,14 @@ const LoginPage = () => {
 
   /* SET GLOBAL USERNAME VARIABLE */
   const setAllUsernames = () => {
-    console.log(valueUsername);
     setGLOBAL_USERNAME(valueUsername);
-    console.log(getGLOBAL_USERNAME());  
+    console.log('Login.js', valueUsername, getGLOBAL_USERNAME());  
   }
+
+  /* SET DEFAULT USERNAME WHEN APP OPENS */
+  useEffect(() => {
+    setAllUsernames()
+  });
 
   return (
     <View style={styles.container}>

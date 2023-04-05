@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, RefreshControl, Text } from 'react-native';
-import NutrientCircles from './NutirentCircles'
+import NutrientCircles from './NutrientCircles'
 import Recommendations from './Recommendations';
 import { getGLOBAL_USERNAME } from './GlobalUsername';
 
@@ -55,8 +55,8 @@ const Dashboard = () => {
         setRefreshing(true);
         let tmp1 = await refreshNutrientCircles();
         let tmp2 = await refreshRecommendations();
-        console.log('tmp1', recommendationsData);
-        console.log('tmp2', nutrientCircleData);
+        //console.log('tmp1', recommendationsData);
+        //console.log('tmp2', nutrientCircleData);
         setRefreshing(false);
     }
 
