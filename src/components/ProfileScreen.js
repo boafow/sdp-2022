@@ -70,7 +70,7 @@ export default ProfileScreen = () => {
           [
             {
               text: 'OK', // Button text
-              onPress: () => console.log('OK pressed') // Action to be performed when OK button is pressed
+              onPress: () => console.log('ProfileScreen.js', 'OK pressed') // Action to be performed when OK button is pressed
             }
           ]
         );
@@ -90,7 +90,7 @@ export default ProfileScreen = () => {
         await fetch(url, requestOptions)
         .then(response => response.json())
         .then((data) => {
-            console.log(data);
+            console.log('ProfileScreen.js', data);
             showMessageAlert(data);
         })
         .catch(error => console.error(error));

@@ -9,6 +9,7 @@ import { Entypo, Feather } from '@expo/vector-icons';
 import { RNS3 } from 'react-native-aws3';
 import credentials from '../../aws-credentials.json';
 import { getS3FileName, getCurrentDate, getCurrentTime } from './S3DateTimeFunctions';
+import { getGLOBAL_USERNAME } from './GlobalUsername';
 
 export default PhoneCamera = () => {
   let cameraRef = useRef();
@@ -16,7 +17,8 @@ export default PhoneCamera = () => {
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [photo, setPhoto] = useState();
   const [fileName, setFileName] = useState(null);
-  const [userName, setUserName] = useState('nmt18004');
+  //const [userName, setUserName] = useState('nmt18004');
+  const userName = getGLOBAL_USERNAME();
   const [textractJSON, setTextractJSON] = useState(null);
 
   /* react-native hook to get camera permissions */
@@ -72,20 +74,20 @@ export default PhoneCamera = () => {
       //'mealDetails': JSON.stringify(textractJSON)
       'mealDetails': textractJSON
     }
-    console.log(tmpBody);
+    console.log('PhoneCamera.js', tmpBody);
 
     var requestOptions = {
       method: 'POST',
       body: JSON.stringify(tmpBody)
     }
     console.log('\n');
-    console.log(requestOptions);
+    console.log('PhoneCamera.js', requestOptions);
 
     const url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/addMealRecord';
     await fetch(url, requestOptions)
     .then(response => response.json())
     .then(data => {
-      console.log(data);
+      console.log('PhoneCamera.js', data);
       const statusCode = data['statusCode'];
       if(statusCode === 200){
         setTextractJSON(null);
@@ -114,7 +116,7 @@ export default PhoneCamera = () => {
             />
           </ScrollView>
         </View>
-        <Button title="Log to Console" onPress={() => console.log(textractJSON)} />
+        <Button title="Log to Console" onPress={() => console.log('PhoneCamera.js', textractJSON)} />
         <Button title="Save to Meal History" onPress={saveTextractJSON}/>
         <Button title="Cancel" onPress={() => setTextractJSON(undefined)} />
       </SafeAreaView>
@@ -147,8 +149,8 @@ export default PhoneCamera = () => {
         console.log("\nSUCCESS: Successfully uploaded image to S3! \n\tS3 Bucket URL: ", response.headers.location);
       }
     })
-    .catch(error => { console.log(error) })
-    .progress((e) => console.log('S3 Upload Progress:', (e.loaded / e.total).toLocaleString('en-US', { style: 'percent' })));
+    .catch(error => { console.log('PhoneCamera.js', error) })
+    .progress((e) => console.log('PhoneCamera.js', 'S3 Upload Progress:', (e.loaded / e.total).toLocaleString('en-US', { style: 'percent' })));
     return fileName;
   }
 
@@ -187,11 +189,11 @@ export default PhoneCamera = () => {
             redirect: 'follow'
           };
           const url = `https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getTextractResults?username=${userName}&filename=${uploadedPictureKey}`
-          console.log('\n' + url);
+          console.log('PhoneCamera.js', '\n' + url);
           await fetch(url, requestOptions)
           .then(response => response.json())
           .then(data => {
-            console.log(data); 
+            console.log('PhoneCamera.js', data); 
             //setTextractJSON(data); 
             setTextractJSON(JSON.stringify(data, null, 2));
           })
