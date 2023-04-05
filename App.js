@@ -18,7 +18,8 @@ export default App = () => {
       <Tab.Navigator
         initialRouteName='LoginPage'
         activeColor='#f0edf6'
-        inactiveColor='#3e2465'>
+        inactiveColor='#3e2465'
+        screenOptions={{unmountOnBlur : true}}>
 
         <Tab.Screen
           name="LoginPage"

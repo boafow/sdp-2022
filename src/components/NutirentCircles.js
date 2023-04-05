@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, Modal } from 'react-native';
+import { View, StyleSheet, Text, Modal, Button } from 'react-native';
 import CircularProgress, { CircularProgressBase } from 'react-native-circular-progress-indicator';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { getGLOBAL_USERNAME } from './GlobalUsername';
@@ -10,29 +10,18 @@ export default NutrientCircles = (props) => {
   const [macrosEaten, setMacrosEaten] = useState(0);
   const [macroGoal, setMacroGoal] = useState(0);
   const percentage = macrosEaten / macroGoal * 100;
-  const [macros, setMacros] = useState(null)
+  // const [macros, setMacros] = useState(null);
+  const [macros, setMacros] = useState(props.refreshedData);
 
   const apiUrl = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getDashboardValues';
   //const user_id = 'rbrown'
   const user_id = getGLOBAL_USERNAME();
   const urlWithQueryParams = `${apiUrl}?user_id=${user_id}`;
-  console.log(urlWithQueryParams);
+  console.log('NutrientCircles.js', urlWithQueryParams);
+  
   useEffect(() => {
-    fetch(urlWithQueryParams)
-      .then((response) => response.json())
-      .then((object) => {
-        if(object['message'] !== 'Internal server error') {
-          setMacros(object.data)
-          console.log('Response:', object);
-        }
-        else {
-          console.log('NutrientCircles.js: Internal server error with PPHAPI/getDashboardValues')
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  }, []);
+    setMacros(props.refreshedData);
+  });
 
   if (macros == null) {
     return <Text>Loading nutrient circles...</Text>
@@ -50,7 +39,7 @@ export default NutrientCircles = (props) => {
     return (
       <View style={styles.container}>
         <View style={styles.box1}>
-
+          <Text style={{fontWeight: 'bold', fontSize: 24}}>Nutrient Circles</Text>
           <CircularProgressBase
             activeStrokeWidth={25}
             inActiveStrokeWidth={25}
