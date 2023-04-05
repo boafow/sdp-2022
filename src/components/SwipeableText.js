@@ -26,20 +26,20 @@ function SwipeableText({ text, onDelete }) {
   ];
 
   return (
-    <View style={styles.container}>
-        <Swipeable
+  <View style={styles.container}>
+    <Swipeable
       onRef={setSwipeable}
       onSwipeableWillOpen={onSwipeableWillOpen}
       rightButtons={rightButtons}
       onRightButtonsOpenRelease={onRightButtonsOpenRelease}
-        >
-        <View style={styles.logText}>
-            <View style={styles.foodItemText}>
-                {text}
-            </View>
+    >
+      <View style={styles.logText}>
+        <View style={styles.foodItemText}>
+          {text}
         </View>
-        </Swipeable>
-    </View>
+      </View>
+    </Swipeable>
+  </View>
     
   );
 }

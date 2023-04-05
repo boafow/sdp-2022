@@ -3,20 +3,35 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
 import SwipeableText from './SwipeableText';
+import { getGLOBAL_USERNAME } from './GlobalUsername';
+
 const FoodLogBox = (props) => {
-  const [views, setViews] = useState([]);
+  //const [views, setViews] = useState(props.mealArray);
+  const [views, setViews] = useState([])
+
   const handleButtonPress = () => {
     const newView = (
-        <Text key={views.length} style={styles.logText}>Testing text updating</Text>
-      
+        <Text key={views.length} style={styles.logText}>Testing text poop</Text>
     );
     setViews([...views, newView]);
   };
+
   const handleDelete = (index) => {
     const newItems = [...views];
     newItems.splice(index, 1);
     setViews(newItems);
   };
+
+  if(props.mealArray) {
+    for (let i = 0; i < props.mealArray.length; i++) {
+      props.mealArray[i].id = i;
+      console.log('FoodLogBox.js', props.mealArray[i].filename);
+    }
+
+    for (let i = 0; i < props.mealArray.length; i++) {
+      console.log('FoodLogBox.js', props.mealArray[i].id);
+    }
+  }
 
   return(
     <View style={styles.mealLogBox}>
@@ -24,30 +39,44 @@ const FoodLogBox = (props) => {
         <Text style={ {padding: 5,fontWeight: 'bold', color:'#52BB40'} }>{props.mealType}</Text>
       </View>
       <View style={styles.container}>
-        {views.map((text, index) => (
+        {/* {views.map((text, index) => (
           <SwipeableText
             righButtonWidth={100}
             key={index}
             useNativeDriver={true} 
-            text={text} onDelete={() => handleDelete(index)} 
+            text={text} 
+            onDelete={() => handleDelete(index)} 
             friction={100} // <-- Adjust the friction to slow down the animation
             tension={10} // <-- Adjust the tension to change the stiffness of the spring
-            />
-      ))}
+          />
+        ))} */}
+        {
+          props.mealArray ? 
+          props.mealArray.map((meal) => 
+            (
+              <View key={meal.id}>
+                <Text>{'Filename: '}{meal.filename}</Text>
+                <Text>{'\t Date: '}{meal.date}</Text>
+                <Text>{'\t Time: '}{meal.time}</Text>
+                <Text>{'\t Meal: '}{meal.mealDetails}</Text>
+                <Text>{'- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'}</Text>
+              </View>
+            )
+          ) 
+          : 
+          <Text>No meals found for {getGLOBAL_USERNAME()}. Swipe down to refresh meal log</Text>
+        }
       </View>
       <View style={styles.logText}>
-        <View style={styles.foodItemText}>
-          
+        <View 
+          style={styles.foodItemText}>
         </View>
-        
-
       </View>
       <View style={styles.add}>
         <Button style={{height:40}} onPress={handleButtonPress}>
           <Text style={styles.text}>Add {props.mealType} </Text>
           <Entypo style = {{color: '#FA9800'}}name="camera" size={24} color="black" />
         </Button>
-          
       </View>
     </View>
   );
@@ -88,7 +117,6 @@ const styles = StyleSheet.create({
   logText:{
     flex: 1,
     margin: 4,
-  
     color: '#0080C9'
 
   },
