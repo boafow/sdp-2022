@@ -59,8 +59,8 @@ const Dashboard = () => {
         let tmp2 = await refreshRecommendations();
         //console.log('tmp1', recommendationsData);
         //console.log('tmp2', nutrientCircleData);
-        setNutrientCircleData(tmp1);
-        setRecommendationsData(tmp2);
+        //setNutrientCircleData(tmp1);
+        //setRecommendationsData(tmp2);
         setRefreshing(false);
     }
 
