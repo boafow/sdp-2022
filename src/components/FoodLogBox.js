@@ -64,7 +64,7 @@ const FoodLogBox = (props) => {
             )
           ) 
           : 
-          <Text>No meals found for {getGLOBAL_USERNAME()}. Swipe down to refresh meal log</Text>
+          <Text>No meals found for {getGLOBAL_USERNAME()}. Swipe down to refresh meal log.</Text>
         }
       </View>
       <View style={styles.logText}>

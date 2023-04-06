@@ -74,9 +74,13 @@ const Dashboard = () => {
             {/* <NutrientCircles refreshedData={refreshNutrientCircles}/>
             <Recommendations refreshedData={refreshRecommendations}/> */}
             {nutrientCircleData !== null ? 
-                <NutrientCircles refreshedData={nutrientCircleData}/> : <Text>No data for nutrient circles for {getGLOBAL_USERNAME()}</Text> }
+                <NutrientCircles refreshedData={nutrientCircleData}/> 
+                : 
+                <Text>No data for nutrient circles for {getGLOBAL_USERNAME()}. Swipe down to refresh dashboard.</Text> }
             {recommendationsData !== null ? 
-                <Recommendations refreshedData={recommendationsData}/> : <Text>No data for recommendations for {getGLOBAL_USERNAME()}</Text>}
+                <Recommendations refreshedData={recommendationsData}/> 
+                : 
+                <Text>No data for recommendations for {getGLOBAL_USERNAME()}. Swipe down to refresh dashboard.</Text>}
         </ScrollView>
     );
 };
