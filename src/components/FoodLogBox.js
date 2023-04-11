@@ -36,7 +36,7 @@ const FoodLogBox = (props) => {
   return(
     <View style={styles.mealLogBox}>
       <View style={styles.titleBlock}>
-        <Text style={ {padding: 5,fontWeight: 'bold', color:'#52BB40'} }>{props.mealType}</Text>
+        <Text style={ {padding: 5, fontWeight: 'bold', color:'#52BB40', fontSize: 24} }>{props.mealType}</Text>
       </View>
       <View style={styles.container}>
         {/* {views.map((text, index) => (
@@ -64,7 +64,7 @@ const FoodLogBox = (props) => {
             )
           ) 
           : 
-          <Text>No meals found for {getGLOBAL_USERNAME()}. Swipe down to refresh meal log</Text>
+          <Text>No meals found for {getGLOBAL_USERNAME()}. Swipe down to refresh meal log.</Text>
         }
       </View>
       <View style={styles.logText}>

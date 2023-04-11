@@ -63,8 +63,26 @@ export default PhoneCamera = () => {
     );
   }
 
+  /* get user input for meal time (breakfast, lunch, or dinner) */
+  const getMealTime = async () => {
+    const tmpMealTime = await new Promise((resolve, reject) => {
+      Alert.alert(
+        'Choose an meal time',
+        'Which meal would you like to log this item for?',
+        [
+          { text: 'Breakfast', onPress: () => {resolve('breakfast');} },
+          { text: 'Lunch', onPress: () => {resolve('lunch');} },
+          { text: 'Dinner', onPress: () => {resolve('dinner');} },
+        ],
+      );
+    });
+    console.log('PhoneCamera.js', tmpMealTime);
+    return tmpMealTime;
+  }
+
   /* takes textractJSON and uploads to DynamoDB via API Gateway + Lambda */
   const saveTextractJSON = async () => {
+    const tmpMealTime = await getMealTime();
     var tmpBody = {
       'username': userName,
       'filename': fileName,
@@ -72,7 +90,8 @@ export default PhoneCamera = () => {
       'time': getCurrentTime(),
       //'mealDetails': JSON.parse(textractJSON)
       //'mealDetails': JSON.stringify(textractJSON)
-      'mealDetails': textractJSON
+      'mealDetails': textractJSON,
+      'mealTime': tmpMealTime
     }
     console.log('PhoneCamera.js', tmpBody);
 
@@ -84,7 +103,7 @@ export default PhoneCamera = () => {
     console.log('PhoneCamera.js', requestOptions);
 
     const url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/addMealRecord';
-    await fetch(url, requestOptions)
+    fetch(url, requestOptions)
     .then(response => response.json())
     .then(data => {
       console.log('PhoneCamera.js', data);
