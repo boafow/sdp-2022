@@ -31,6 +31,7 @@ export default ProfileScreen = () => {
   const handleRefresh = async () => {
     setRefreshing(true);
     let tmp1 = await getBiometricMeasurements();
+    let tmp2 = await getMacroValues();
     setRefreshing(false);
   }
 
@@ -139,7 +140,71 @@ export default ProfileScreen = () => {
     })
     .catch(error => console.error(error));
   }
-
+  /* GET MACRONUTRIENT VALUES USING GET PPH/? */
+  const getMacroValues = async () => {
+    const base_url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/setUserGoals';
+    const username = getGLOBAL_USERNAME()
+    const params = `?user_id=${username}`
+    const url = base_url + params;
+    console.log('ProfileScreen.js 149: PPH/setUserGoals URL -->', url);
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    await fetch(url, requestOptions)
+      .then(response => response.json())
+      .then((data) => {
+          if(data.message === 'User data retrieved successfully'){
+            const tmpJSON = data.data[0];
+            console.log('ProfileScreen.js GET PPH/setUserGoals response:', tmpJSON);
+            /* SET MACRONUTRIENT CURRENT & GOAL VALUE STATES */
+            setValueCurrentCalories(tmpJSON['current_calories']);
+            setValueCurrentCarbs(tmpJSON['current_carbs']);
+            setValueCurrentFats(tmpJSON['current_fat']);
+            setValueCurrentProteins(tmpJSON['current_protein']);
+            setValueGoalCalories(tmpJSON['calories_goal']);
+            setValueGoalCarbs(tmpJSON['carb_goal']);
+            setValueGoalFats(tmpJSON['fat_goal']);
+            setValueGoalProteins(tmpJSON['protein_goal']);
+          }
+          else {
+            console.log('ProfileScreen.js 92: Error with GET PPH/setUserGoals');
+            /* MAKE NULL: MACRONUTRIENT CURRENT & GOAL VALUE STATES */
+          }
+      })
+      .catch(error => console.error(error));
+  }
+  /* SET MACRONUTRIENT VALUES USING GET PPH/? */
+  const setMacroValues = async () => {
+    var tmpBody = {
+      'user_id': getGLOBAL_USERNAME(),
+      'current_calories': valueCurrentCalories,
+      'current_carbs': valueCurrentCarbs,
+      'current_fat': valueCurrentFats,
+      'current_protein': valueCurrentProteins,
+      'calories_goal': valueGoalCalories,
+      'carb_goal': valueGoalCarbs,
+      'fat_goal': valueGoalFats,
+      'protein_goal': valueGoalProteins
+    }
+    var requestOptions = {
+      method: 'POST',
+      httpMethod: 'POST',
+      body: JSON.stringify(tmpBody)
+    }
+    const url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/setUserGoals';
+    fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      if(data.message === 'Record added/updated successfully'){
+        console.log('ProfileScreen.js 202: POST PPH/setUserGoals', data);
+      }
+      else{
+        console.log('ProfileScreen.js 205: Error with POST PPH/setUserGoals', data);
+      }
+    })
+    .catch(error => console.error(error));
+  }
   /* HTML & JSX CODE */
   return (
     // <SafeAreaView style={styles.container}>
@@ -226,6 +291,19 @@ export default ProfileScreen = () => {
             value={valueGoalFats}
             keyboardType='numeric'
           />
+          <View>
+          <Text style={styles.text_header}>Update Macronutrient Metrics</Text>
+          {valueCurrentCalories && valueCurrentCarbs && valueCurrentFats && valueCurrentProteins && 
+           valueGoalCalories && valueGoalCarbs && valueGoalFats && valueGoalProteins ?
+              <TouchableOpacity onPress={setMacroValues} style={styles.button_updateMacros}>
+                <Text style={styles.text_button}>Update Macronutrient Values</Text>
+              </TouchableOpacity>
+              :
+              <Text>
+                  First, please enter values for the current / goal macronutrient values.
+              </Text>
+          }
+        </View>
           {/* VIEW FOR SUBHEADING */}
           <View style={{padding: 15}}>
             <Text style={{fontSize: 22, textAlign: 'center'}}>Biometric Measurements</Text>
@@ -314,7 +392,7 @@ export default ProfileScreen = () => {
     </View>
   );
 };
-
+/* STYLESHEET */
 const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -364,4 +442,10 @@ const styles = StyleSheet.create({
       borderRadius: 5,
       marginBottom: 20,
     },
+    button_updateMacros: {
+      backgroundColor: '#efad32',
+      padding: 10,
+      borderRadius: 5,
+      marginBottom: 20,
+    }
 });
