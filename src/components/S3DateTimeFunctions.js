@@ -19,3 +19,20 @@ export const getCurrentTime = () => {
 export const getS3FileName = (filename) => {
     return filename + '_' + getCurrentDate() + '_' + getCurrentTime() + '.jpg';
 }
+
+export const getHumanReadableDate = (tmpDate) => {
+    const date = new Date(tmpDate);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const readableDate = date.toLocaleDateString('en-US', options);
+    return readableDate;
+}
+
+export const getHumanReadableTime = (tmpTime) => {
+    const hour = parseInt(tmpTime.slice(0, 2));
+    const minute = tmpTime.slice(3, 5);
+    const second = tmpTime.slice(6, 8);
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+    const readableTime = `${hour12}:${minute} ${period}`; 
+    return readableTime;
+}

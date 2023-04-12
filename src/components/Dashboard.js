@@ -5,6 +5,7 @@ import Recommendations from './Recommendations';
 import { getGLOBAL_USERNAME } from './GlobalUsername';
 
 const Dashboard = () => {
+    /* REACT-NATIVE HOOKS / STATES FOR REFRESHING + NUTRIENT DATA + RECOMMENDATION DATA */
     const [refreshing, setRefreshing] = useState(false);
     const [nutrientCircleData, setNutrientCircleData] = useState(null);
     const [recommendationsData, setRecommendationsData] = useState(null);

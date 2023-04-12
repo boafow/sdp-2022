@@ -18,9 +18,12 @@ const FoodLogScreen = () => {
   const [valueTimeRange, setValueTimeRange] = useState(null);
   const [itemsTimeRange, setItemsTimeRange] = useState(timeRangeItems);
 
-  /* REFRESH STATE + MEAL ARRAY STATE */
+  /* REFRESH STATE + MEAL ARRAY STATES */
   const [refreshing, setRefreshing] = useState(false);
   const [mealArray, setMealArray] = useState(null);
+  const [mealArrayBreakfast, setMealArrayBreakfast] = useState(null);
+  const [mealArrayLunch, setMealArrayLunch] = useState(null);
+  const [mealArrayDinner, setMealArrayDinner] = useState(null);
   var array_breakfast = [];
   var array_lunch = [];
   var array_dinner = [];
@@ -44,10 +47,24 @@ const FoodLogScreen = () => {
         else {
           setMealArray(json.mealRecords);
         }
-        /* LOG MEAL RECORDS TO CONSOLE */
+        /* CREATE ARRAYS BASED ON MEALTIME */
         for (let i = 0; i < json.mealRecords.length; i++) {
-          console.log('FoodLogScreen.js', json.mealRecords[i].filename);
+          //console.log('FoodLogScreen.js', json.mealRecords[i].filename);
+          const tmpMealRecord = json.mealRecords[i];
+          if(tmpMealRecord.mealTime === 'breakfast') {
+            array_breakfast.push(tmpMealRecord);
+          }
+          if(tmpMealRecord.mealTime === 'lunch') {
+            array_lunch.push(tmpMealRecord);
+          }
+          if(tmpMealRecord.mealTime === 'dinner') {
+            array_dinner.push(tmpMealRecord);
+          }
         }
+        /* SET STATES FOR MEALTIME ARRAYS */
+        setMealArrayBreakfast(array_breakfast);
+        setMealArrayLunch(array_lunch);
+        setMealArrayDinner(array_dinner);
       }
       else {
           console.log('FoodLogScreen.js: Internal server error with PPHAPI/getMealRecord')
@@ -72,10 +89,17 @@ const FoodLogScreen = () => {
       >
         <FoodLogBox
           mealType="Breakfast"
-          //mealArray={array_breakfast}
-          mealArray={mealArray}
+          mealArray={mealArrayBreakfast}
         />
-        <DropDownPicker
+        <FoodLogBox
+          mealType="Lunch"
+          mealArray={mealArrayLunch}
+        />
+        <FoodLogBox
+          mealType="Dinner"
+          mealArray={mealArrayDinner}
+        />
+        {/* <DropDownPicker
           open={openTimeRange}
           value={valueTimeRange}
           items={itemsTimeRange}
@@ -84,18 +108,7 @@ const FoodLogScreen = () => {
           setItems={setItemsTimeRange}
           maxHeight={175}
           placeholder={'Select time range for meal log'}
-        />
-          {/* <FoodLogBox 
-            mealType="Lunch"
-            mealArray={mealArray}
-          />
-          <FoodLogBox 
-            mealType="Dinner"
-            mealArray={mealArray}
-          /> */}
-          {/* <FoodLogBox 
-          mealType="Snacks"
-          /> */}
+        /> */}
       </ScrollView>
     </View>
   );
