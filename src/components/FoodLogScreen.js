@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet, RefreshControl } from 'react-native';
+import { View, ScrollView, StyleSheet, RefreshControl, Text } from 'react-native';
 import FoodLogBox from './FoodLogBox';
 import { getGLOBAL_USERNAME } from './GlobalUsername';
 
@@ -82,6 +82,11 @@ const FoodLogScreen = () => {
         style={styles.scrollingPart}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>}
       >
+        <View style={{padding: 15}}>
+          <Text style={{fontSize: 24, fontWeight: 'bold'}}>Meal Log</Text>
+          <Text style={{fontSize: 20}}>Scanned Nutrition Labels</Text>
+          <Text></Text>
+        </View>
         <FoodLogBox
           mealType="Breakfast"
           mealArray={mealArrayBreakfast}

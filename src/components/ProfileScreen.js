@@ -37,12 +37,13 @@ export default ProfileScreen = () => {
 
   /* FETCHES BMR CACLUALTIONS FROM API GATEWAY: PPH/getBMRCalculations */
   const getBMRCalculations = async () => {
-      const totalHeightInches = valueHeightFeet * 12 + valueHeightInches;
+      const totalHeightInches = (parseInt(valueHeightFeet) * 12) + parseInt(valueHeightInches);
       const totalHeightCentimeters = totalHeightInches * 2.54;
       const totalWeightKilograms = valueWeight / 2.205;
       const base_url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getBMRCalculations'
       const params = `?weight=${totalWeightKilograms}&height=${totalHeightCentimeters}&age=${valueAge}&gender=${valueGender}&activity=${valueActivity}`;
       const url = base_url + params;
+      console.log('ProfileScreen.js:', url);
       var requestOptions = {
           method: 'GET',
           redirect: 'follow'
@@ -59,6 +60,10 @@ export default ProfileScreen = () => {
   /* HTML / JSX CODE */
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{padding: 15}}>
+        <Text style={{fontSize: 24, fontWeight: 'bold'}}>User Profile</Text>
+        <Text style={{fontSize: 20}}>Macro Goals + Biometric Measurements</Text>
+      </View>
       <ScrollView
         contentContainerStyle={styles.container}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>}
