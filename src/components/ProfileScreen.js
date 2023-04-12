@@ -156,7 +156,7 @@ export default ProfileScreen = () => {
       .then((data) => {
           if(data.message === 'User data retrieved successfully'){
             const tmpJSON = data.data[0];
-            console.log('ProfileScreen.js GET PPH/setUserGoals response:', tmpJSON);
+            console.log('ProfileScreen.js 159: GET PPH/setUserGoals response:', tmpJSON);
             /* SET MACRONUTRIENT CURRENT & GOAL VALUE STATES */
             setValueCurrentCalories(tmpJSON['current_calories']);
             setValueCurrentCarbs(tmpJSON['current_carbs']);
@@ -168,8 +168,16 @@ export default ProfileScreen = () => {
             setValueGoalProteins(tmpJSON['protein_goal']);
           }
           else {
-            console.log('ProfileScreen.js 92: Error with GET PPH/setUserGoals');
+            console.log('ProfileScreen.js 171: Error with GET PPH/setUserGoals');
             /* MAKE NULL: MACRONUTRIENT CURRENT & GOAL VALUE STATES */
+            setValueCurrentCalories(null);
+            setValueCurrentCarbs(null);
+            setValueCurrentFats(null);
+            setValueCurrentProteins(null);
+            setValueGoalCalories(null);
+            setValueGoalCarbs(null);
+            setValueGoalFats(null);
+            setValueGoalProteins(null);
           }
       })
       .catch(error => console.error(error));
@@ -374,8 +382,10 @@ export default ProfileScreen = () => {
               <Text>
                   First, please enter values for age, height, weight, gender, and activity level.
               </Text>
+              
           }
         </View>
+        <Text></Text>
         <View>
           <Text style={styles.text_header}>Update Biometric Measurements</Text>
           {valueAge && valueHeightFeet && valueHeightInches && valueGender && valueActivity ?
