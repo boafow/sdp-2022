@@ -21,6 +21,18 @@ export default ProfileScreen = () => {
   const [valueGender, setValueGender] = useState(null);
   const [valueActivity, setValueActivity] = useState(null);
 
+  /* REACT-NATIVE STATES TO HOLD MACRO CURRENT VALUES */
+  const [valueCurrentCalories, setValueCurrentCalories] = useState(null);
+  const [valueCurrentCarbs, setValueCurrentCarbs] = useState(null);
+  const [valueCurrentProteins, setValueCurrentProteins] = useState(null);
+  const [valueCurrentFats, setValueCurrentFats] = useState(null);
+
+  /* REACT-NATIVE STATES TO HOLD MACRO GOAL VALUES */
+  const [valueGoalCalories, setValueGoalCalories] = useState(null);
+  const [valueGoalCarbs, setValueGoalCarbs] = useState(null);
+  const [valueGoalProteins, setValueGoalProteins] = useState(null);
+  const [valueGoalFats, setValueGoalFats] = useState(null);
+
   /* DISPLAYS ALERT WITH BMR CALCULATIONS */
   const showMessageAlert = (data) => {
       Alert.alert(
@@ -57,7 +69,7 @@ export default ProfileScreen = () => {
       .catch(error => console.error(error));
   }
 
-  /* HTML / JSX CODE */
+  /* HTML & JSX CODE */
   return (
     // <SafeAreaView style={styles.container}>
     <View style={styles.mainContainer}>
@@ -68,7 +80,84 @@ export default ProfileScreen = () => {
           {/* VIEW FOR HEADING + SUBHEADING */}
           <View style={{padding: 15}}>
             <Text style={{fontSize: 24, fontWeight: 'bold'}}>User Profile</Text>
-            <Text style={{fontSize: 20}}>Macro Goals + Biometric Measurements</Text>
+            <Text></Text>
+            <Text style={{fontSize: 22, textAlign: 'center'}}>Macronutrient Goals</Text>
+          </View>
+          {/* CURRENT CALORIES */}
+          <Text style={styles.text_header}>Current Calories Consumed:</Text>
+          <Text style={styles.text_instruction}>Enter in the current # of calories you have consumed today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(currentCalories) => setValueCurrentCalories(currentCalories)}
+            value={valueCurrentCalories}
+            keyboardType='numeric'
+          />
+          {/* CALORIE GOAL */}
+          <Text style={styles.text_header}>Calorie Goal:</Text>
+          <Text style={styles.text_instruction}>Enter in the # of calories you would like to consume today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(goalCalories) => setValueGoalCalories(goalCalories)}
+            value={valueGoalCalories}
+            keyboardType='numeric'
+          />
+          {/* CURRENT CARBS */}
+          <Text style={styles.text_header}>Current Carbohydrates Consumed:</Text>
+          <Text style={styles.text_instruction}>Enter in the current # of carbs you have consumed today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(currentCarbs) => setValueCurrentCarbs(currentCarbs)}
+            value={valueCurrentCarbs}
+            keyboardType='numeric'
+          />
+          {/* CARB GOAL */}
+          <Text style={styles.text_header}>Carbohydrates Goal:</Text>
+          <Text style={styles.text_instruction}>Enter in the # of carbs you would like to consume today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(goalCarbs) => setValueGoalCarbs(goalCarbs)}
+            value={valueGoalCarbs}
+            keyboardType='numeric'
+          />
+          {/* CURRENT PROTEINS */}
+          <Text style={styles.text_header}>Current Protein Consumed:</Text>
+          <Text style={styles.text_instruction}>Enter in the current # of grams of protein you have consumed today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(currentProtein) => setValueCurrentProteins(currentProtein)}
+            value={valueCurrentProteins}
+            keyboardType='numeric'
+          />
+          {/* PROTEIN GOAL */}
+          <Text style={styles.text_header}>Protein Goal:</Text>
+          <Text style={styles.text_instruction}>Enter in the # of grams of protein you would like to consume today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(goalProtein) => setValueGoalProteins(goalProtein)}
+            value={valueGoalProteins}
+            keyboardType='numeric'
+          />
+          {/* CURRENT FATS */}
+          <Text style={styles.text_header}>Current Fat Consumed:</Text>
+          <Text style={styles.text_instruction}>Enter in the current # of grams of fat you have consumed today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(currentFat) => setValueCurrentFats(currentFat)}
+            value={valueCurrentFats}
+            keyboardType='numeric'
+          />
+          {/* FATS GOAL */}
+          <Text style={styles.text_header}>Fat Goal:</Text>
+          <Text style={styles.text_instruction}>Enter in the # of grams of fat you would like to consume today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(goalFats) => setValueGoalFats(goalFats)}
+            value={valueGoalFats}
+            keyboardType='numeric'
+          />
+          {/* VIEW FOR SUBHEADING */}
+          <View style={{padding: 15}}>
+            <Text style={{fontSize: 22, textAlign: 'center'}}>Biometric Measurements</Text>
           </View>
           {/* AGE */}
           <Text style={styles.text_header}>Age:</Text>
@@ -179,7 +268,7 @@ const styles = StyleSheet.create({
       fontSize: 12,
       width: '100%',
       padding: 10,
-      marginBottom: 25
+      marginBottom: 10
     },
     button: {
       backgroundColor: '#007bff',

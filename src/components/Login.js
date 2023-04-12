@@ -20,7 +20,7 @@ const LoginPage = () => {
   
   /* HOOKS FOR DROPDOWN PICKER*/
   const [openUsername, setOpenUsername] = useState(false);
-  const [valueUsername, setValueUsername] = useState('abc00000');
+  const [valueUsername, setValueUsername] = useState('nmt18004');
   const [itemsUsername, setItemsUsername] = useState(usernameItems);
 
   /* SET GLOBAL USERNAME VARIABLE */
