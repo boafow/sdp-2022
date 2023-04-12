@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
-import { getGLOBAL_USERNAME } from './GlobalUsername';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image } from 'react-native';
 
 export default Recommendations = (props) => {
     const [resData, setResData] = useState(props.refreshedData)
-    
+    /* IF PROPS.REFRESHEDDATA IS NULL */
     if (resData === null) {
         return <Text>Loading recommendations...</Text>
     }
     else {
-        //return the recommendations and loop through them displaying their labels
+        /*RETURN THE RECOMMENDATIONS AND LOOP THROUGH THEM; DISPLAY THEIR LABELS*/
         return (
             <View style={styles.container}>
-                <Text style={{fontWeight: 'bold', fontSize: 24}}>Meal Recommendations</Text>
+                <Text style={{fontWeight: 'bold', fontSize: 24, alignSelf: 'flex-start'}}>Meal Recommendations</Text>
                 {resData.map((item, index) => {
                     return (
                         <View key={index} style={{flexDirection: 'row'}}>
@@ -26,7 +25,6 @@ export default Recommendations = (props) => {
         );
     }
 }
-
 
 const styles = StyleSheet.create({
     container: {

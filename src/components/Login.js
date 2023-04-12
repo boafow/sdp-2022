@@ -4,7 +4,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { setGLOBAL_USERNAME, getGLOBAL_USERNAME } from './GlobalUsername';
 
 const LoginPage = () => {
-  //const [username, setUsername] = useState('');
+  /* REACT-NATIVE HOOK FOR DUMMY PASSWORD */
   const [password, setPassword] = useState('*********');
   
   /* HARDCODED USERNAME ARRAY */
@@ -34,15 +34,10 @@ const LoginPage = () => {
     setAllUsernames()
   });
 
+  /* HTML & JSX CODE */
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
-      {/* <TextInput
-        style={styles.input}
-        placeholder="Username"
-        onChangeText={(text) => setUsername(text)}
-        value={username}
-      /> */}
       <DropDownPicker
                 open={openUsername}
                 value={valueUsername}
@@ -50,7 +45,6 @@ const LoginPage = () => {
                 setOpen={setOpenUsername}
                 setValue={(value) => {setValueUsername(value); setAllUsernames();}}
                 setItems={setItemsUsername}
-                // maxHeight={75}
                 style={styles.drop_down}
                 placeholder={'Select username'}
             />

@@ -9,7 +9,7 @@ const Dashboard = () => {
     const [refreshing, setRefreshing] = useState(false);
     const [nutrientCircleData, setNutrientCircleData] = useState(null);
     const [recommendationsData, setRecommendationsData] = useState(null);
-
+    /* QUERYING PPH/getDashboardValues FOR NUTRIENT CIRCLES*/
     const refreshNutrientCircles = async () => {
         const apiUrl = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getDashboardValues';
         const user_id = getGLOBAL_USERNAME();
@@ -30,7 +30,7 @@ const Dashboard = () => {
             setNutrientCircleData(null);
         }
     };
-    
+    /* QUERYING PPH/getRecipeRecommendations FOR RECOMMENDATIONS*/
     const refreshRecommendations = async () => {
         const apiUrl = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getRecipeRecommendations';
         const user_id = getGLOBAL_USERNAME();
@@ -51,7 +51,7 @@ const Dashboard = () => {
             setRecommendationsData(null);
         }
     };
-
+    /* HANDLES REFRESH LOGIC, PULLS NEW DATA FOR REFRESH SWIPE IN SCROLL VIEW*/
     const handleRefresh = async () => {
         setRefreshing(true);
         setNutrientCircleData(null);
@@ -70,10 +70,6 @@ const Dashboard = () => {
             style={styles.container}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>}
         >
-            {/* <NutrientCircles refreshedData={nutrientCircleData}/>
-            <Recommendations refreshedData={recommendationsData}/> */}
-            {/* <NutrientCircles refreshedData={refreshNutrientCircles}/>
-            <Recommendations refreshedData={refreshRecommendations}/> */}
             {nutrientCircleData !== null ? 
                 <NutrientCircles refreshedData={nutrientCircleData}/> 
                 : 
@@ -95,5 +91,3 @@ const styles = StyleSheet.create({
     },
 });
 export default Dashboard;
-  
-

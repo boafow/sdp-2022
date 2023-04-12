@@ -2,52 +2,24 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
-import SwipeableText from './SwipeableText';
 import { getGLOBAL_USERNAME } from './GlobalUsername';
 import { getHumanReadableDate, getHumanReadableTime } from './S3DateTimeFunctions';
 
 const FoodLogBox = (props) => {
-  //const [views, setViews] = useState(props.mealArray);
-  const [views, setViews] = useState([])
-
-  const handleButtonPress = () => {
-    const newView = (
-        <Text key={views.length} style={styles.logText}>Testing text poop</Text>
-    );
-    setViews([...views, newView]);
-  };
-
-  const handleDelete = (index) => {
-    const newItems = [...views];
-    newItems.splice(index, 1);
-    setViews(newItems);
-  };
-
+  
   /* SETS ID'S LOCALLY SO FOR <VIEW></VIEW> COMPONENT THAT MAPS MEAL ARRAY*/
   if(props.mealArray) {
     for (let i = 0; i < props.mealArray.length; i++) {
       props.mealArray[i].id = i;
-      const tmpArray = props.mealArray[i];
-      const tmpMealRecordJSONString = JSON.stringify(tmpArray.mealDetails);
-      const tmpMealRecordJSONObject = JSON.parse(tmpMealRecordJSONString);
-      console.log('NEIL-33 FoodLogBox.js', typeof tmpMealRecordJSONString);
-      props.mealArray[i].mealDetails = tmpMealRecordJSONObject;
-      console.log('NEIL-35 FoodLogBox.js', props.mealArray[i].filename);
-      console.log('NEIL-36 FoodLogBox.js', props.mealArray[i].id);
-      console.log('NEIL-37 FoodLogBox.js', props.mealArray[i].mealDetails);
     }
   }
 
-  // if(props.mealArray) {
-  //   if(props.mealArray[0]) {
-  //     const tmpArray = props.mealArray[0];
-  //     const tmpMealRecordJSON = JSON.parse(tmpArray.mealDetails);
-  //     for(const key in tmpMealRecordJSON) {
-  //       console.log('NEIL-46:', key + ': ' + tmpMealRecordJSON[key]);
-  //     }
-  //   }
-  // }
+  /* HANDLES CAMERA ICON BUTTON PRESS */
+  const handleButtonPress = () => {
+    console.log('FoodLogBox.js 28: ', 'Pressed camera icon to add', props.mealType)
+  }
 
+  /* CONTAINS JSX LOGIC TO DISPLAY JSON FROM API REQUEST */
   return(
     <View style={styles.mealLogBox}>
       <View style={styles.titleBlock}>
@@ -63,6 +35,7 @@ const FoodLogBox = (props) => {
               console.log('NEIL-63', tmpMealDetails, typeof tmpMealDetails);
               const tmpMinerals = tmpMealDetails['minerals']
               console.log('NEIL-65', tmpMinerals, typeof tmpMinerals);
+              /*RETURN VIEW COMPONENTS*/
               return(
                 <View key={meal.id}>
                   {/*MEAL*/}
@@ -142,7 +115,9 @@ const FoodLogBox = (props) => {
                   {tmpMinerals['zinc'] && 
                     <Text>{'Zinc:\t\t'}{tmpMinerals['zinc'][0] + ', (' + tmpMinerals['zinc'][1] + ')'}</Text>
                   }
-                  <Text>{'- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -'}</Text>
+                  <Text style={{fontWeight: 'bold',fontSize: 36}}>
+                    {'- - - - - - - - - - - - - - - - - - '}
+                  </Text>
                 </View>
             )
           }
