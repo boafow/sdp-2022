@@ -59,15 +59,18 @@ export default ProfileScreen = () => {
 
   /* HTML / JSX CODE */
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={{padding: 15}}>
-        <Text style={{fontSize: 24, fontWeight: 'bold'}}>User Profile</Text>
-        <Text style={{fontSize: 20}}>Macro Goals + Biometric Measurements</Text>
-      </View>
+    // <SafeAreaView style={styles.container}>
+    <View style={styles.mainContainer}>
       <ScrollView
-        contentContainerStyle={styles.container}
+        style={styles.scrollingPart}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>}
       >
+          {/* VIEW FOR HEADING + SUBHEADING */}
+          <View style={{padding: 15}}>
+            <Text style={{fontSize: 24, fontWeight: 'bold'}}>User Profile</Text>
+            <Text style={{fontSize: 20}}>Macro Goals + Biometric Measurements</Text>
+          </View>
+          {/* AGE */}
           <Text style={styles.text_header}>Age:</Text>
           <Text style={styles.text_instruction}>Enter in your age in # of years.</Text>
           <TextInput
@@ -76,7 +79,7 @@ export default ProfileScreen = () => {
             value={valueAge}
             keyboardType='numeric'
           />
-
+          {/* HEIGHT IN FEET */}
           <Text style={styles.text_header}>Height in Feet:</Text>
           <Text style={styles.text_instruction}>Enter in your height in # of feet.</Text>
           <TextInput
@@ -85,7 +88,7 @@ export default ProfileScreen = () => {
             value={valueHeightFeet}
             keyboardType='numeric'
           />
-          
+          {/* HEIGHT IN INCHES */}
           <Text style={styles.text_header}>Height in Inches:</Text>
           <Text style={styles.text_instruction}>Enter in your height in # of inches.</Text>
           <TextInput
@@ -94,7 +97,7 @@ export default ProfileScreen = () => {
             value={valueHeightInches}
             keyboardType='numeric'
           />
-          
+          {/* WEIGHT */}
           <Text style={styles.text_header}>Weight:</Text>
           <Text style={styles.text_instruction}>Enter in your weight in # of pounds.</Text>
           <TextInput
@@ -103,7 +106,7 @@ export default ProfileScreen = () => {
             value={valueWeight}
             keyboardType='numeric'
           />
-          
+          {/* GENDER */}
           <Text style={styles.text_header}>Gender:</Text>
           <Text style={styles.text_instruction}>Enter in your gender as M or F.</Text>
           <TextInput
@@ -111,7 +114,7 @@ export default ProfileScreen = () => {
             onChangeText={(gender) => setValueGender(gender)}
             value={valueGender}
           />
-          
+          {/* ACTIVITY LEVEL */}
           <Text style={styles.text_header}>Activity Level:</Text>
           <Text style={styles.text_instruction}>Enter in your activity level as 1 of these 4 choices:</Text>
           <Text>{'\u2022'} S for Sedentary</Text>
@@ -124,24 +127,19 @@ export default ProfileScreen = () => {
             value={valueActivity}
           />
         <View>
-          <Text style={styles.text_header}>Submit Profile</Text>
+          <Text style={styles.text_header}>Calculate Basal Metabolic Rate</Text>
           {valueAge && valueHeightFeet && valueHeightInches && valueGender && valueActivity ?
-              // <Button 
-              //     title='Calculate Basal Metabolic Rate'
-              //     onPress={getBMRCalculations}
-              // >
-              // </Button>
               <TouchableOpacity onPress={getBMRCalculations} style={styles.button}>
-                <Text style={styles.buttonText}>Press Me</Text>
+                <Text style={styles.text_button}>Calculate BMR</Text>
               </TouchableOpacity>
               :
               <Text>
-                  Please enter values for age, height, weight, gender, and activity level.
+                  First, please enter values for age, height, weight, gender, and activity level.
               </Text>
           }
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 
 };
@@ -149,9 +147,16 @@ export default ProfileScreen = () => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      alignItems: 'flex-start',
+      alignItems: 'stretch',
       justifyContent: 'flex-start',
-      padding: 15
+    },
+    mainContainer: {
+      flex:1, 
+      paddingTop: 50, 
+      paddingHorizontal: 15,
+    },
+    scrollingPart: {
+      flex: 1,
     },
     text_header: {
       fontSize: 16,
@@ -163,6 +168,10 @@ const styles = StyleSheet.create({
       fontSize: 14,
       textAlign: 'left',
       paddingBottom: 5
+    },
+    text_button: {
+      textAlign: 'center', 
+      fontWeight: 'bold'
     },
     input: {
       borderWidth: 3,

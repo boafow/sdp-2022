@@ -91,10 +91,14 @@ const FoodLogScreen = () => {
           mealType="Breakfast"
           mealArray={mealArrayBreakfast}
         />
+        <Text></Text>
+        <Text></Text>
         <FoodLogBox
           mealType="Lunch"
           mealArray={mealArrayLunch}
         />
+        <Text></Text>
+        <Text></Text>
         <FoodLogBox
           mealType="Dinner"
           mealArray={mealArrayDinner}
@@ -108,7 +112,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 4,
+    paddingHorizontal: 15,
     paddingTop: 50,
   },
   scrollingPart: {

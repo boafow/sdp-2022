@@ -87,11 +87,11 @@ const FoodLogBox = (props) => {
                   {tmpMealDetails['protein'] &&
                     <Text>{'Protein:\t\t\t'}{tmpMealDetails['protein']}</Text>
                   }
-                  <Text></Text>
-
+                  
                   {/*MINERALS*/}
                   {Object.keys(tmpMinerals).length !== 0 && <Text style={styles.metric}>Minerals:</Text>}
                   {tmpMinerals['vitamin d'] && 
+                    <Text></Text> &&
                     <Text>{'Vitamin D:\t\t'}{tmpMinerals['vitamin d'][0] + ', (' + tmpMinerals['vitamin d'][1] + ')'}</Text>
                   }
                   {tmpMinerals['calcium'] && 
@@ -115,8 +115,8 @@ const FoodLogBox = (props) => {
                   {tmpMinerals['zinc'] && 
                     <Text>{'Zinc:\t\t'}{tmpMinerals['zinc'][0] + ', (' + tmpMinerals['zinc'][1] + ')'}</Text>
                   }
-                  <Text style={{fontWeight: 'bold',fontSize: 36}}>
-                    {'- - - - - - - - - - - - - - - - - - '}
+                  <Text style={{fontWeight: 'bold', fontSize: 36, textAlign: 'center'}}>
+                    {'⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯'}
                   </Text>
                 </View>
             )
