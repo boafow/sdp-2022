@@ -1,20 +1,14 @@
-import { style } from 'deprecated-react-native-prop-types/DeprecatedViewPropTypes';
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, SafeAreaView, Button, Alert, RefreshControl, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Alert, RefreshControl, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { getGLOBAL_USERNAME } from './GlobalUsername';
 
 export default ProfileScreen = () => {
   /* REACT-NATIVE HOOK TO HANDLE REFRESH STATE */
   const [refreshing, setRefreshing] = useState(false);
 
-  /* FUNCTION TO HANDLE REFRESHING OF DATA */
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    /* REFRESH DATA HERE */
-    setRefreshing(false);
-  }
   /* REACT-NATIVE STATES TO HOLD USER PROFILE AGE, HEIGHT, ETC. */
-  const [valueAge, setValueAge] = useState(null);
+  const [valueAge, setValueAge] = useState('');
   const [valueHeightFeet, setValueHeightFeet] = useState(null);
   const [valueHeightInches, setValueHeightInches] = useState(null);
   const [valueWeight, setValueWeight] = useState(null);
@@ -32,6 +26,13 @@ export default ProfileScreen = () => {
   const [valueGoalCarbs, setValueGoalCarbs] = useState(null);
   const [valueGoalProteins, setValueGoalProteins] = useState(null);
   const [valueGoalFats, setValueGoalFats] = useState(null);
+
+  /* FUNCTION TO HANDLE REFRESHING OF DATA */
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    let tmp1 = await getBiometricMeasurements();
+    setRefreshing(false);
+  }
 
   /* DISPLAYS ALERT WITH BMR CALCULATIONS */
   const showMessageAlert = (data) => {
@@ -55,11 +56,11 @@ export default ProfileScreen = () => {
       const base_url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getBMRCalculations'
       const params = `?weight=${totalWeightKilograms}&height=${totalHeightCentimeters}&age=${valueAge}&gender=${valueGender}&activity=${valueActivity}`;
       const url = base_url + params;
-      console.log('ProfileScreen.js:', url);
+      console.log('ProfileScreen.js PPH/getBMRCalculations URL:', url);
       var requestOptions = {
           method: 'GET',
           redirect: 'follow'
-        };
+      };
       await fetch(url, requestOptions)
       .then(response => response.json())
       .then((data) => {
@@ -67,6 +68,76 @@ export default ProfileScreen = () => {
           showMessageAlert(data);
       })
       .catch(error => console.error(error));
+  }
+  /* FETCH BIOMETRIC MEASUREMENTS (AGE, HEIGHT, WEIGHT, ETC.) USING GET PPH/setUserData */
+  const getBiometricMeasurements = async () => {
+    const base_url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/setUserData';
+    const username = getGLOBAL_USERNAME()
+    const params = `?username=${username}`
+    const url = base_url + params;
+    console.log('ProfileScreen.js PPH/setUserData URL:', url);
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    await fetch(url, requestOptions)
+      .then(response => response.json())
+      .then((data) => {
+          if(data.message === 'User data retrieved successfully'){
+            const tmpJSON = data.data;
+            console.log('ProfileScreen.js PPH/setUserData response:', tmpJSON);
+            setValueAge(tmpJSON['age'].toString());
+            setValueHeightFeet(tmpJSON['height_feet'].toString());
+            setValueHeightInches(tmpJSON['height_inches'].toString());
+            setValueGender(tmpJSON['gender'].toString());
+            setValueWeight(tmpJSON['weight'].toString());
+            setValueActivity(tmpJSON['activity'].toString());
+          }
+          else {
+            console.log('ProfileScreen.js 92: Error with GET PPH/setUserData');
+            setValueAge(null);
+            setValueHeightFeet(null);
+            setValueHeightInches(null);
+            setValueGender(null);
+            setValueWeight(null);
+            setValueActivity(null);
+          }
+          
+      })
+      .catch(error => console.error(error));
+  }
+  /* SET OR UPDATE BIOMETRIC MEASUREMENTS USING POST PPH/setUserData */
+  const setBiometricMeasurements = async () => {
+    var tmpBody = {
+      'username': getGLOBAL_USERNAME(),
+      'height_feet': parseInt(valueHeightFeet),
+      'height_inches': parseInt(valueHeightInches),
+      'weight': parseInt(valueWeight),
+      'age': parseInt(valueAge),
+      'gender': valueGender,
+      'activity': valueActivity
+    }
+    var requestOptions = {
+      method: 'POST',
+      httpMethod: 'POST',
+      body: JSON.stringify(tmpBody)
+    }
+    const url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/setUserData';
+    fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      if(data.message === 'User data retrieved successfully'){
+        console.log('ProfileScreen.js 130:', data);
+      }
+      if(data.message === 'User data added successfully'){
+        console.log('ProfileScreen.js 133:', data);
+      }
+      else{
+        console.log('ProfileScreen.js 136: Error with POST PPH/setUserData')
+        console.log(data);
+      }
+    })
+    .catch(error => console.error(error));
   }
 
   /* HTML & JSX CODE */
@@ -218,8 +289,20 @@ export default ProfileScreen = () => {
         <View>
           <Text style={styles.text_header}>Calculate Basal Metabolic Rate</Text>
           {valueAge && valueHeightFeet && valueHeightInches && valueGender && valueActivity ?
-              <TouchableOpacity onPress={getBMRCalculations} style={styles.button}>
+              <TouchableOpacity onPress={getBMRCalculations} style={styles.button_bmr}>
                 <Text style={styles.text_button}>Calculate BMR</Text>
+              </TouchableOpacity>
+              :
+              <Text>
+                  First, please enter values for age, height, weight, gender, and activity level.
+              </Text>
+          }
+        </View>
+        <View>
+          <Text style={styles.text_header}>Update Biometric Measurements</Text>
+          {valueAge && valueHeightFeet && valueHeightInches && valueGender && valueActivity ?
+              <TouchableOpacity onPress={setBiometricMeasurements} style={styles.button_updateProfile}>
+                <Text style={styles.text_button}>Update Biometric Measurements</Text>
               </TouchableOpacity>
               :
               <Text>
@@ -230,7 +313,6 @@ export default ProfileScreen = () => {
       </ScrollView>
     </View>
   );
-
 };
 
 const styles = StyleSheet.create({
@@ -270,8 +352,14 @@ const styles = StyleSheet.create({
       padding: 10,
       marginBottom: 10
     },
-    button: {
+    button_bmr: {
       backgroundColor: '#007bff',
+      padding: 10,
+      borderRadius: 5,
+      marginBottom: 20,
+    },
+    button_updateProfile: {
+      backgroundColor: '#55ba45',
       padding: 10,
       borderRadius: 5,
       marginBottom: 20,
