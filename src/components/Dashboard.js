@@ -73,11 +73,14 @@ const Dashboard = () => {
             {nutrientCircleData !== null ? 
                 <NutrientCircles refreshedData={nutrientCircleData}/> 
                 : 
-                <Text>No data for nutrient circles for {getGLOBAL_USERNAME()}. Swipe down to refresh dashboard.</Text> }
+                <Text>No data for nutrient circles for {getGLOBAL_USERNAME()}. Swipe down to refresh dashboard.</Text>
+            }
+            <Text></Text>
             {recommendationsData !== null ? 
                 <Recommendations refreshedData={recommendationsData}/> 
                 : 
-                <Text>No data for recommendations for {getGLOBAL_USERNAME()}. Swipe down to refresh dashboard.</Text>}
+                <Text>No data for recommendations for {getGLOBAL_USERNAME()}. Swipe down to refresh dashboard.</Text>
+            }
         </ScrollView>
     );
 };
@@ -87,7 +90,8 @@ const styles = StyleSheet.create({
         marginLeft: 5,
         marginRight: 5,
         marginTop: 50,
-        marginBottom: 1
+        marginBottom: 1,
+        padding: 15
     },
 });
 export default Dashboard;
