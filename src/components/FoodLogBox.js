@@ -4,8 +4,11 @@ import { Entypo } from '@expo/vector-icons';
 import { Button } from 'react-native-paper';
 import { getGLOBAL_USERNAME } from './GlobalUsername';
 import { getHumanReadableDate, getHumanReadableTime } from './S3DateTimeFunctions';
+import { useNavigation } from '@react-navigation/native';
 
 const FoodLogBox = (props) => {
+
+  const navigation = useNavigation();
   
   /* SETS ID'S LOCALLY SO FOR <VIEW></VIEW> COMPONENT THAT MAPS MEAL ARRAY*/
   if(props.mealArray) {
@@ -132,7 +135,7 @@ const FoodLogBox = (props) => {
         </View>
       </View>
       <View style={styles.add}>
-        <Button style={{height:40}} onPress={handleButtonPress}>
+        <Button style={{height:40}} onPress={() => navigation.navigate('CameraPage')}>
           <Text style={styles.text}>Add {props.mealType} </Text>
           <Entypo style = {{color: '#FA9800'}}name="camera" size={24} color="black" />
         </Button>
