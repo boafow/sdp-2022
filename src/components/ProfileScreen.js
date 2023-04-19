@@ -37,16 +37,27 @@ export default ProfileScreen = () => {
 
   /* DISPLAYS ALERT WITH BMR CALCULATIONS */
   const showMessageAlert = (data) => {
-      Alert.alert(
-        'BMR Calculations',  // Title of the alert
-        JSON.stringify(data, null, 2),  // Message of the alert
-        [
-          {
-            text: 'OK', // Button text
-            onPress: () => console.log('ProfileScreen.js', 'OK pressed') // Action to be performed when OK button is pressed
-          }
-        ]
-      );
+    const maintainWeight = data.maintainWeight.toString();
+    const mildWeightLoss = data.mildWeightLoss.toString();
+    const weightLoss = data.weightLoss.toString();
+    const extremeWeightLoss = data.extremeWeightLoss.toString();
+    const line0 = '\n';
+    const line1 = 'Maintain Weight: ' + maintainWeight + ' calories \n\n';
+    const line2 = 'Mild Weight Loss: ' + mildWeightLoss + ' calories \n\n';
+    const line3 = 'Weight Loss: ' + weightLoss + ' calories \n\n';
+    const line4 = 'Extreme Weight Loss: ' + extremeWeightLoss + ' calories';
+    const message = line0 + line1 + line2 + line3 + line4;
+    Alert.alert(
+      'BMR Calculations',  // Title of the alert
+      //JSON.stringify(data, null, 2),  // Message of the alert
+      message,
+      [
+        {
+          text: 'OK', // Button text
+          onPress: () => console.log('ProfileScreen.js', 'OK pressed') // Action to be performed when OK button is pressed
+        }
+      ]
+    );
   };
 
   /* FETCHES BMR CACLUALTIONS FROM API GATEWAY: PPH/getBMRCalculations */
