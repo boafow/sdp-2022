@@ -245,6 +245,11 @@ export default ProfileScreen = () => {
     })
     .catch(error => console.error(error));
   }
+  /* CALLS HANDLEREFESH() FUNCTION TO LOAD DATA */
+  useEffect(() => {
+    handleRefresh();
+  }, []);
+  
   /* HTML & JSX CODE */
   return (
     // <SafeAreaView style={styles.container}>
