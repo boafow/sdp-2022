@@ -81,6 +81,27 @@ export default ProfileScreen = () => {
       })
       .catch(error => console.error(error));
   }
+  /* SHOW BMR DESCRIPTION */
+  const showBMRDescription = () => {
+    const BMRmessage = 
+    "BMR stands for Basal Metabolic Rate, which is the amount of energy (measured in calories) that a person's body " 
+    + 
+    "requires to maintain basic functions while at rest, such as breathing, circulation, and organ function." + " \n\nIt represents the minimum"
+    + 
+    "amount of energy required to sustain life and is influenced by various factors, including age, weight, height, gender, and body composition. "
+    + 
+    "\n\nBMR is typically measured while a person is in a fasted and resting state, such as when they first wake up in the morning. \n\nKnowing one's "
+    +
+    "BMR can be useful for determining daily caloric needs and planning a healthy diet and exercise routine."
+
+    Alert.alert(
+      'Basal Metabolic Rate',
+      BMRmessage,
+      [
+        { text: 'OK' }
+      ]
+    );
+  }
   /* FETCH BIOMETRIC MEASUREMENTS (AGE, HEIGHT, WEIGHT, ETC.) USING GET PPH/setUserData */
   const getBiometricMeasurements = async () => {
     const base_url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/setUserData';
@@ -393,8 +414,11 @@ export default ProfileScreen = () => {
               <Text>
                   First, please enter values for age, height, weight, gender, and activity level.
               </Text>
-              
           }
+          <Text></Text>
+          <TouchableOpacity onPress={showBMRDescription} style={styles.button_what_is_bmr}>
+            <Text style={styles.text_button}>What's BMR?</Text>
+          </TouchableOpacity>
         </View>
         <Text></Text>
         <View>
@@ -453,6 +477,12 @@ const styles = StyleSheet.create({
     },
     button_bmr: {
       backgroundColor: '#007bff',
+      padding: 10,
+      borderRadius: 5,
+      marginBottom: 20,
+    },
+    button_what_is_bmr: {
+      backgroundColor: '#9D8DF1',
       padding: 10,
       borderRadius: 5,
       marginBottom: 20,

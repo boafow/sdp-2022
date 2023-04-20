@@ -33,7 +33,7 @@ export default NutrientCircles = (props) => {
     return (
       <View style={styles.container}>
         <View style={styles.box1}>
-          <Text style={{fontWeight: 'bold', fontSize: 24}}>Nutrient Circles</Text>
+          <Text style={{fontWeight: 'bold', fontSize: 24, paddingBottom: 15}}>Nutrient Circles</Text>
           <CircularProgressBase
             activeStrokeWidth={25}
             inActiveStrokeWidth={25}
