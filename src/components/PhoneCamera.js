@@ -89,6 +89,7 @@ export default PhoneCamera = () => {
       'date': getCurrentDate(),
       'time': getCurrentTime(),
       'mealDetails': textractJSON,
+      'mealCalories': JSON.parse(textractJSON)['calories'],
       'mealTime': tmpMealTime
     }
     console.log('PhoneCamera.js', tmpBody);

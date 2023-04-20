@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, RefreshControl, Text } from 'react-native';
 import NutrientCircles from './NutrientCircles'
 import Recommendations from './Recommendations';
@@ -64,6 +64,10 @@ const Dashboard = () => {
         //setRecommendationsData(tmp2);
         setRefreshing(false);
     }
+    /* CALLS HANDLEREFESH() FUNCTION TO LOAD DATA */
+    useEffect(() => {
+        handleRefresh();
+    }, []);
 
     return (
         <ScrollView 

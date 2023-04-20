@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, RefreshControl, Text } from 'react-native';
 import FoodLogBox from './FoodLogBox';
 import { getGLOBAL_USERNAME } from './GlobalUsername';
@@ -74,7 +74,13 @@ const FoodLogScreen = () => {
     setRefreshing(true);
       getMealRecord();
     setRefreshing(false);
-}
+  }
+
+  /* CALLS HANDLEREFESH() FUNCTION TO LOAD DATA */
+  useEffect(() => {
+    handleRefresh();
+  }, []);
+
   return(
     <View style={styles.container}>
       <ScrollView 
