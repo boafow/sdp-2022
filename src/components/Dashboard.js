@@ -5,10 +5,11 @@ import Recommendations from './Recommendations';
 import { getGLOBAL_USERNAME } from './GlobalUsername';
 
 const Dashboard = () => {
+    /* REACT-NATIVE HOOKS / STATES FOR REFRESHING + NUTRIENT DATA + RECOMMENDATION DATA */
     const [refreshing, setRefreshing] = useState(false);
     const [nutrientCircleData, setNutrientCircleData] = useState(null);
     const [recommendationsData, setRecommendationsData] = useState(null);
-
+    /* QUERYING PPH/getDashboardValues FOR NUTRIENT CIRCLES*/
     const refreshNutrientCircles = async () => {
         const apiUrl = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getDashboardValues';
         const user_id = getGLOBAL_USERNAME();
@@ -29,7 +30,7 @@ const Dashboard = () => {
             setNutrientCircleData(null);
         }
     };
-    
+    /* QUERYING PPH/getRecipeRecommendations FOR RECOMMENDATIONS*/
     const refreshRecommendations = async () => {
         const apiUrl = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getRecipeRecommendations';
         const user_id = getGLOBAL_USERNAME();
@@ -50,7 +51,7 @@ const Dashboard = () => {
             setRecommendationsData(null);
         }
     };
-
+    /* HANDLES REFRESH LOGIC, PULLS NEW DATA FOR REFRESH SWIPE IN SCROLL VIEW*/
     const handleRefresh = async () => {
         setRefreshing(true);
         setNutrientCircleData(null);
@@ -69,18 +70,17 @@ const Dashboard = () => {
             style={styles.container}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>}
         >
-            {/* <NutrientCircles refreshedData={nutrientCircleData}/>
-            <Recommendations refreshedData={recommendationsData}/> */}
-            {/* <NutrientCircles refreshedData={refreshNutrientCircles}/>
-            <Recommendations refreshedData={refreshRecommendations}/> */}
             {nutrientCircleData !== null ? 
                 <NutrientCircles refreshedData={nutrientCircleData}/> 
                 : 
-                <Text>No data for nutrient circles for {getGLOBAL_USERNAME()}. Swipe down to refresh dashboard.</Text> }
+                <Text>No data for nutrient circles for {getGLOBAL_USERNAME()}. Swipe down to refresh dashboard.</Text>
+            }
+            <Text></Text>
             {recommendationsData !== null ? 
                 <Recommendations refreshedData={recommendationsData}/> 
                 : 
-                <Text>No data for recommendations for {getGLOBAL_USERNAME()}. Swipe down to refresh dashboard.</Text>}
+                <Text>No data for recommendations for {getGLOBAL_USERNAME()}. Swipe down to refresh dashboard.</Text>
+            }
         </ScrollView>
     );
 };
@@ -90,9 +90,8 @@ const styles = StyleSheet.create({
         marginLeft: 5,
         marginRight: 5,
         marginTop: 50,
-        marginBottom: 1
+        marginBottom: 1,
+        padding: 15
     },
 });
 export default Dashboard;
-  
-

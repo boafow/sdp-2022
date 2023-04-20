@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Modal, Button } from 'react-native';
 import CircularProgress, { CircularProgressBase } from 'react-native-circular-progress-indicator';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { getGLOBAL_USERNAME } from './GlobalUsername';
 
 export default NutrientCircles = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -16,9 +15,11 @@ export default NutrientCircles = (props) => {
     setMacros(props.refreshedData);
   });
 
+  /* IF PROPS.REFRESHEDDATA IS NULL; PASSED FROM DASHBOARD.JS */
   if (macros == null) {
     return <Text>Loading nutrient circles...</Text>
   }
+  /* ELSE RENDER NUTRIENT CIRCLES */
   else {
     const calValue = macros.calories;
     const calTargetValue = macros.caloriesGoal;
@@ -32,7 +33,7 @@ export default NutrientCircles = (props) => {
     return (
       <View style={styles.container}>
         <View style={styles.box1}>
-          <Text style={{fontWeight: 'bold', fontSize: 24}}>Nutrient Circles</Text>
+          <Text style={{fontWeight: 'bold', fontSize: 24, paddingBottom: 15}}>Nutrient Circles</Text>
           <CircularProgressBase
             activeStrokeWidth={25}
             inActiveStrokeWidth={25}

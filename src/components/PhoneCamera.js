@@ -12,16 +12,16 @@ import { getS3FileName, getCurrentDate, getCurrentTime } from './S3DateTimeFunct
 import { getGLOBAL_USERNAME } from './GlobalUsername';
 
 export default PhoneCamera = () => {
+  /* REACT-NATIVE STATES FOR CAMERA, PHOTO, FILE, USERNAME, TEXTRACT-JSON */
   let cameraRef = useRef();
   const [hasCameraPermission, setHasCameraPermission] = useState();  
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [photo, setPhoto] = useState();
   const [fileName, setFileName] = useState(null);
-  //const [userName, setUserName] = useState('nmt18004');
   const userName = getGLOBAL_USERNAME();
   const [textractJSON, setTextractJSON] = useState(null);
 
-  /* react-native hook to get camera permissions */
+  /* REACT-NATIVE HOOK TO GET CAMERA PERMISSIONS */
   useEffect(() => {
     (async () => {
       const cameraPermission = await Camera.requestCameraPermissionsAsync();
@@ -31,7 +31,7 @@ export default PhoneCamera = () => {
     })();
   }, []);
 
-  /* shows an error message on screen if camera permissions pending / not granted */
+  /* SHOWS AN ERROR MESSAGE ON SCREEN IF CAMERA PERMISSIONS PENDING / NOT GRANTED  */
   if (hasCameraPermission === undefined) {
     return <Text>Requesting permissions...</Text>
   } 
@@ -39,7 +39,7 @@ export default PhoneCamera = () => {
     return <Text>Permission for camera not granted. Please change this in settings.</Text>
   }
 
-  /* if photo is taken, display preview + save button + discard button */
+  /* IF PHOTO IS TAKEN, DISPLAY PREVIEW + SAVE BUTTON + DISCARD BUTTON */
   if (photo) {
     let sharePic = () => {
       shareAsync(photo.uri).then(() => {
@@ -63,7 +63,7 @@ export default PhoneCamera = () => {
     );
   }
 
-  /* get user input for meal time (breakfast, lunch, or dinner) */
+  /* GET USER INPUT FOR MEAL TIME (BREAKFAST, LUNCH, OR DINNER) */
   const getMealTime = async () => {
     const tmpMealTime = await new Promise((resolve, reject) => {
       Alert.alert(
@@ -80,7 +80,7 @@ export default PhoneCamera = () => {
     return tmpMealTime;
   }
 
-  /* takes textractJSON and uploads to DynamoDB via API Gateway + Lambda */
+  /* TAKES TEXTRACTJSON AND UPLOADS TO DYNAMODB VIA API GATEWAY + LAMBDA */
   const saveTextractJSON = async () => {
     const tmpMealTime = await getMealTime();
     var tmpBody = {
@@ -88,8 +88,6 @@ export default PhoneCamera = () => {
       'filename': fileName,
       'date': getCurrentDate(),
       'time': getCurrentTime(),
-      //'mealDetails': JSON.parse(textractJSON)
-      //'mealDetails': JSON.stringify(textractJSON)
       'mealDetails': textractJSON,
       'mealTime': tmpMealTime
     }
@@ -115,10 +113,8 @@ export default PhoneCamera = () => {
     .catch(error => console.error(error));
   }
   
-  /* if we receive JSON from fetchTextractResults API, render editable text */
+  /* IF WE RECEIVE JSON FROM FETCHTEXTRACTRESULTS API, RENDER EDITABLE TEXT  */
   if (textractJSON) {
-    //const [text, setText] = useState('');
-
     return (
       <SafeAreaView style={styles.container}>
         <View style={{height: '45%', width: '75%'}}>
@@ -142,7 +138,7 @@ export default PhoneCamera = () => {
     );
   }
 
-  /* hardcoded keyPrefix=username */
+  /* UPLOADS PHOTO FILE TO S3; EACH USER HAS PHOTOS STORED IN THEIR OWN FOLDER */
   const uploadPictureToS3 = async (tmpURI, tmpFileName) => {
     const tmpKeyPrefix = userName + '/';
     const fileName = getS3FileName(tmpFileName);
@@ -162,10 +158,10 @@ export default PhoneCamera = () => {
     };
     const response = await RNS3.put(file, options).then(response => {
       if (response.status !== 200) {
-        throw new Error("\nFAILURE: Failed to upload image to S3!");
+        throw new Error("PhoneCamera.js: FAILURE: Failed to upload image to S3!");
       }
       else {
-        console.log("\nSUCCESS: Successfully uploaded image to S3! \n\tS3 Bucket URL: ", response.headers.location);
+        console.log("PhoneCamera.js: SUCCESS: Successfully uploaded image to S3! \n\tS3 Bucket URL: ", response.headers.location);
       }
     })
     .catch(error => { console.log('PhoneCamera.js', error) })
@@ -173,19 +169,18 @@ export default PhoneCamera = () => {
     return fileName;
   }
 
-  /* linked to circular button */
+  /* LINKED TO CIRCULAR SNAPCHAT STYLE PHOTO BUTTON */
   let takePic = async () => {
     let options = {
       quality: 1,
       base64: true,
       exif: false
     };
-
     let newPhoto = await cameraRef.current.takePictureAsync(options);
     setPhoto(newPhoto);
   };
 
-  /* linked to upload button; triggers S3 upload via uploadPicture(); fetches Textract result via API */
+  /* LINKED TO UPLOAD BUTTON; TRIGGERS S3 UPLOAD VIA UPLOADPICTURE(); FETCHES TEXTRACT RESULT VIA API */
   const pickImage = async () => {
     const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!granted) {
@@ -198,11 +193,11 @@ export default PhoneCamera = () => {
       let uploadedPictureKey = '';
       Alert.prompt('Enter nutrition label name', null, (tmpFileName) => {
         (async () => {
-          /* upload image to S3 and return file name */
+          /* UPLOAD IMAGE TO S3 AND RETURN FILE NAME */
           uploadedPictureKey = await uploadPictureToS3(fileURI, tmpFileName);
           setFileName(uploadedPictureKey);
 
-          /* fetches Textract result via API */
+          /* FETCHES TEXTRACT RESULT VIA API */
           var requestOptions = {
             method: 'GET',
             redirect: 'follow'
@@ -213,7 +208,6 @@ export default PhoneCamera = () => {
           .then(response => response.json())
           .then(data => {
             console.log('PhoneCamera.js', data); 
-            //setTextractJSON(data); 
             setTextractJSON(JSON.stringify(data, null, 2));
           })
           .catch(error => console.error(error));
@@ -224,10 +218,9 @@ export default PhoneCamera = () => {
     if (picture.cancelled) {
       setFileName(null);
     }
-    
   };
 
-  /*contains HTML code for camera + circle button + upload button */
+  /* CONTAINS HTML CODE FOR CAMERA + CIRCLE BUTTON + UPLOAD BUTTON */
   return (
     <Camera style={styles.container} ref={cameraRef}>
       <View style={styles.buttonContainer}>
@@ -241,7 +234,7 @@ export default PhoneCamera = () => {
   );
 };
 
-/* stylesheet */
+/* STYLESHEET */
 const styles = StyleSheet.create({
   container: {
     flex: 1,

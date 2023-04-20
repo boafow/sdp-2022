@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { setGLOBAL_USERNAME, getGLOBAL_USERNAME } from './GlobalUsername';
+import { height } from 'deprecated-react-native-prop-types/DeprecatedImagePropType';
 
 const LoginPage = () => {
-  //const [username, setUsername] = useState('');
+  /* REACT-NATIVE HOOK FOR DUMMY PASSWORD */
   const [password, setPassword] = useState('*********');
   
   /* HARDCODED USERNAME ARRAY */
@@ -20,13 +21,12 @@ const LoginPage = () => {
   
   /* HOOKS FOR DROPDOWN PICKER*/
   const [openUsername, setOpenUsername] = useState(false);
-  const [valueUsername, setValueUsername] = useState('abc00000');
+  const [valueUsername, setValueUsername] = useState('nmt18004');
   const [itemsUsername, setItemsUsername] = useState(usernameItems);
 
   /* SET GLOBAL USERNAME VARIABLE */
   const setAllUsernames = () => {
     setGLOBAL_USERNAME(valueUsername);
-    console.log('Login.js', valueUsername, getGLOBAL_USERNAME());  
   }
 
   /* SET DEFAULT USERNAME WHEN APP OPENS */
@@ -34,26 +34,20 @@ const LoginPage = () => {
     setAllUsernames()
   });
 
+  /* HTML & JSX CODE */
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
-      {/* <TextInput
-        style={styles.input}
-        placeholder="Username"
-        onChangeText={(text) => setUsername(text)}
-        value={username}
-      /> */}
       <DropDownPicker
-                open={openUsername}
-                value={valueUsername}
-                items={itemsUsername}
-                setOpen={setOpenUsername}
-                setValue={(value) => {setValueUsername(value); setAllUsernames();}}
-                setItems={setItemsUsername}
-                // maxHeight={75}
-                style={styles.drop_down}
-                placeholder={'Select username'}
-            />
+        open={openUsername}
+        value={valueUsername}
+        items={itemsUsername}
+        setOpen={setOpenUsername}
+        setValue={(value) => {setValueUsername(value); setAllUsernames();}}
+        setItems={setItemsUsername}
+        style={styles.drop_down}
+        placeholder={'Select username'}
+      />
       {valueUsername &&
         <TextInput
           style={styles.input}
@@ -80,25 +74,34 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+    fontWeight: 'bold',
     marginBottom: 20,
   },
   input: {
-    width: 200,
-    height: 44,
+    width: '70%',
+    height: 48,
     padding: 10,
     borderWidth: 1,
     borderColor: 'black',
-    marginBottom: 10,
+    marginBottom: 20,
+    borderRadius: 10
   },
   drop_down: {
     flex: 1,
     justifyContent: 'center',
-    marginBottom: 75
+    marginBottom: 75,
+    width: '70%',
+    alignSelf: 'center',
+
   },
   button: {
     backgroundColor: '#FA9800',
     padding: 10,
     borderRadius: 5,
+    width: '35%',
+    textAlign: 'center',
+    alignItems: 'center',
+    borderRadius: 10
   },
   buttonText: {
     color: 'white',

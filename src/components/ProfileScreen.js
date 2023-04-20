@@ -1,204 +1,502 @@
-import { style } from 'deprecated-react-native-prop-types/DeprecatedViewPropTypes';
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, SafeAreaView, Button, Alert } from 'react-native';
-//import { Picker } from '@react-native-picker/picker';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { View, Text, StyleSheet, TextInput, Alert, RefreshControl, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import { getGLOBAL_USERNAME } from './GlobalUsername';
 
 export default ProfileScreen = () => {
-    //GENERATE AGE ARRAY
-    const ageItems = [];
-    for (let i = 18; i <= 75; i++) {
-        ageItems.push({ label: `${i}`, value: i });
-    }
-    //GENERATE HEIGHT FEET ARRAY
-    const heightFeetItems = [];
-    for (let i = 1; i <= 7; i++) {
-        heightFeetItems.push({ label: `${i} ft`, value: i });
-    }
-    //GENERATE HEIGHT INCHES ARRAY
-    const heightInchesItems = [];
-    for (let i = 0; i <= 11; i++) {
-        heightInchesItems.push({ label: `${i} in`, value: i });
-    }
-    //GENERATE WEIGHT INCHES ARRAY
-    const weightItems = [];
-    for (let i = 75; i <= 225; i++) {
-        weightItems.push({ label: `${i} lbs`, value: i });
-    }
-    //HARDCODED GENDER ARRAY
-    const genderItems = [{label: 'Male', value: 'M'}, {label: 'Female', value: 'F'}];
+  /* REACT-NATIVE HOOK TO HANDLE REFRESH STATE */
+  const [refreshing, setRefreshing] = useState(false);
 
-    //HARDCODED ACTIVITY ARRAY
-    const activityItems = [
-        {label: 'Sedentary', value: 'S'},
-        {label: 'Occasionally Active', value: 'O'},
-        {label: 'Active', value: 'A'},
-        {label: 'Highly Active', value: 'H'}
-    ];
+  /* REACT-NATIVE STATES TO HOLD USER PROFILE AGE, HEIGHT, ETC. */
+  const [valueAge, setValueAge] = useState('');
+  const [valueHeightFeet, setValueHeightFeet] = useState(null);
+  const [valueHeightInches, setValueHeightInches] = useState(null);
+  const [valueWeight, setValueWeight] = useState(null);
+  const [valueGender, setValueGender] = useState(null);
+  const [valueActivity, setValueActivity] = useState(null);
 
-    const [openAge, setOpenAge] = useState(false);
-    const [openHeightFeet, setOpenHeightFeet] = useState(false);
-    const [openHeightInches, setOpenHeightInches] = useState(false);
-    const [openWeight, setOpenWeight] = useState(false);
-    const [openGender, setOpenGender] = useState(false);
-    const [openActivity, setOpenActivity] = useState(false);
+  /* REACT-NATIVE STATES TO HOLD MACRO CURRENT VALUES */
+  const [valueCurrentCalories, setValueCurrentCalories] = useState(null);
+  const [valueCurrentCarbs, setValueCurrentCarbs] = useState(null);
+  const [valueCurrentProteins, setValueCurrentProteins] = useState(null);
+  const [valueCurrentFats, setValueCurrentFats] = useState(null);
 
-    const [valueAge, setValueAge] = useState(null);
-    const [itemsAge, setItemsAge] = useState(ageItems);
+  /* REACT-NATIVE STATES TO HOLD MACRO GOAL VALUES */
+  const [valueGoalCalories, setValueGoalCalories] = useState(null);
+  const [valueGoalCarbs, setValueGoalCarbs] = useState(null);
+  const [valueGoalProteins, setValueGoalProteins] = useState(null);
+  const [valueGoalFats, setValueGoalFats] = useState(null);
 
-    const [valueHeightFeet, setValueHeightFeet] = useState(null);
-    const [itemsHeightFeet, setItemsHeightFeet] = useState(heightFeetItems);
+  /* FUNCTION TO HANDLE REFRESHING OF DATA */
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    let tmp1 = await getBiometricMeasurements();
+    let tmp2 = await getMacroValues();
+    setRefreshing(false);
+  }
 
-    const [valueHeightInches, setValueHeightInches] = useState(null);
-    const [itemsHeightInches, setItemHeightInches] = useState(heightInchesItems);
-
-    const [valueWeight, setValueWeight] = useState(null);
-    const [itemsWeight, setItemsWeight] = useState(weightItems);
-
-    const [valueGender, setValueGender] = useState(null);
-    const [itemsGender, setItemsGender] = useState(genderItems);
-
-    const [valueActivity, setValueActivity] = useState(null);
-    const [itemsActivity, setItemsActivity] = useState(activityItems);
-
-    const showMessageAlert = (data) => {
-        Alert.alert(
-          'BMR Calculations',  // Title of the alert
-          JSON.stringify(data, null, 2),  // Message of the alert
-          [
-            {
-              text: 'OK', // Button text
-              onPress: () => console.log('ProfileScreen.js', 'OK pressed') // Action to be performed when OK button is pressed
-            }
-          ]
-        );
-      };
-
-    const getBMRCalculations = async () => {
-        const totalHeightInches = valueHeightFeet * 12 + valueHeightInches;
-        const totalHeightCentimeters = totalHeightInches * 2.54;
-        const totalWeightKilograms = valueWeight / 2.205;
-        const base_url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getBMRCalculations'
-        const params = `?weight=${totalWeightKilograms}&height=${totalHeightCentimeters}&age=${valueAge}&gender=${valueGender}&activity=${valueActivity}`;
-        const url = base_url + params;
-        var requestOptions = {
-            method: 'GET',
-            redirect: 'follow'
-          };
-        await fetch(url, requestOptions)
-        .then(response => response.json())
-        .then((data) => {
-            console.log('ProfileScreen.js', data);
-            showMessageAlert(data);
-        })
-        .catch(error => console.error(error));
-    }
-
-    return (
-        <SafeAreaView>
-            <Text style={styles.text}>Age:</Text>
-            <DropDownPicker
-                open={openAge}
-                value={valueAge}
-                items={itemsAge}
-                setOpen={setOpenAge}
-                setValue={setValueAge}
-                setItems={setItemsAge}
-                maxHeight={75}
-                placeholder={'Select your age (years)'}
-            />
-            <Text style={styles.text}>Height in Feet:</Text>
-            <DropDownPicker
-                open={openHeightFeet}
-                value={valueHeightFeet}
-                items={itemsHeightFeet}
-                setOpen={setOpenHeightFeet}
-                setValue={setValueHeightFeet}
-                setItems={setItemsHeightFeet}
-                maxHeight={75}
-                placeholder={'Select your height (ft)'}
-            />
-            <Text style={styles.text}>Height in Inches:</Text>
-            <DropDownPicker
-                open={openHeightInches}
-                value={valueHeightInches}
-                items={itemsHeightInches}
-                setOpen={setOpenHeightInches}
-                setValue={setValueHeightInches}
-                setItems={setItemHeightInches}
-                maxHeight={75}
-                placeholder={'Select your height (in)'}
-            />  
-            <Text style={styles.text}>Weight:</Text>
-            <DropDownPicker
-                open={openWeight}
-                value={valueWeight}
-                items={itemsWeight}
-                setOpen={setOpenWeight}
-                setValue={setValueWeight}
-                setItems={setItemsWeight}
-                maxHeight={75}
-                placeholder={'Select your weight (lbs)'}
-            />
-            <Text style={styles.text}>Gender:</Text>
-            <DropDownPicker
-                open={openGender}
-                value={valueGender}
-                items={itemsGender}
-                setOpen={setOpenGender}
-                setValue={setValueGender}
-                setItems={setItemsGender}
-                maxHeight={75}
-                placeholder={'Select your gender'}
-            />
-            <Text style={styles.text}>Activity Level:</Text>
-            <DropDownPicker
-                open={openActivity}
-                value={valueActivity}
-                items={itemsActivity}
-                setOpen={setOpenActivity}
-                setValue={setValueActivity}
-                setItems={setItemsActivity}
-                maxHeight={75}
-                placeholder={'Select your activity level'}
-            />
-            <Text style={styles.text}>Submit Profile</Text>
-            {valueAge && valueHeightFeet && valueHeightInches && valueGender && valueActivity ?
-                <Button 
-                    title='Calculate Basal Metabolic Rate'
-                    onPress={getBMRCalculations}
-                >
-                </Button>
-                :
-                <Text>
-                    Please select values for age, height, weight, gender, and activity level.
-                </Text>
-            }
-        </SafeAreaView>
+  /* DISPLAYS ALERT WITH BMR CALCULATIONS */
+  const showMessageAlert = (data) => {
+    const maintainWeight = data.maintainWeight.toString();
+    const mildWeightLoss = data.mildWeightLoss.toString();
+    const weightLoss = data.weightLoss.toString();
+    const extremeWeightLoss = data.extremeWeightLoss.toString();
+    const line0 = '\n';
+    const line1 = 'Maintain Weight: ' + maintainWeight + ' calories \n\n';
+    const line2 = 'Mild Weight Loss: ' + mildWeightLoss + ' calories \n\n';
+    const line3 = 'Weight Loss: ' + weightLoss + ' calories \n\n';
+    const line4 = 'Extreme Weight Loss: ' + extremeWeightLoss + ' calories';
+    const message = line0 + line1 + line2 + line3 + line4;
+    Alert.alert(
+      'BMR Calculations',  // Title of the alert
+      //JSON.stringify(data, null, 2),  // Message of the alert
+      message,
+      [
+        {
+          text: 'OK', // Button text
+          onPress: () => console.log('ProfileScreen.js', 'OK pressed') // Action to be performed when OK button is pressed
+        }
+      ]
     );
+  };
 
+  /* FETCHES BMR CACLUALTIONS FROM API GATEWAY: PPH/getBMRCalculations */
+  const getBMRCalculations = async () => {
+      const totalHeightInches = (parseInt(valueHeightFeet) * 12) + parseInt(valueHeightInches);
+      const totalHeightCentimeters = totalHeightInches * 2.54;
+      const totalWeightKilograms = valueWeight / 2.205;
+      const base_url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/getBMRCalculations'
+      const params = `?weight=${totalWeightKilograms}&height=${totalHeightCentimeters}&age=${valueAge}&gender=${valueGender}&activity=${valueActivity}`;
+      const url = base_url + params;
+      console.log('ProfileScreen.js PPH/getBMRCalculations URL:', url);
+      var requestOptions = {
+          method: 'GET',
+          redirect: 'follow'
+      };
+      await fetch(url, requestOptions)
+      .then(response => response.json())
+      .then((data) => {
+          console.log('ProfileScreen.js', data);
+          showMessageAlert(data);
+      })
+      .catch(error => console.error(error));
+  }
+  /* SHOW BMR DESCRIPTION */
+  const showBMRDescription = () => {
+    const BMRmessage = 
+    "BMR stands for Basal Metabolic Rate, which is the amount of energy (measured in calories) that a person's body " 
+    + 
+    "requires to maintain basic functions while at rest, such as breathing, circulation, and organ function." + " \n\nIt represents the minimum"
+    + 
+    "amount of energy required to sustain life and is influenced by various factors, including age, weight, height, gender, and body composition. "
+    + 
+    "\n\nBMR is typically measured while a person is in a fasted and resting state, such as when they first wake up in the morning. \n\nKnowing one's "
+    +
+    "BMR can be useful for determining daily caloric needs and planning a healthy diet and exercise routine."
+
+    Alert.alert(
+      'Basal Metabolic Rate',
+      BMRmessage,
+      [
+        { text: 'OK' }
+      ]
+    );
+  }
+  /* FETCH BIOMETRIC MEASUREMENTS (AGE, HEIGHT, WEIGHT, ETC.) USING GET PPH/setUserData */
+  const getBiometricMeasurements = async () => {
+    const base_url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/setUserData';
+    const username = getGLOBAL_USERNAME()
+    const params = `?username=${username}`
+    const url = base_url + params;
+    console.log('ProfileScreen.js PPH/setUserData URL:', url);
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    await fetch(url, requestOptions)
+      .then(response => response.json())
+      .then((data) => {
+          if(data.message === 'User data retrieved successfully'){
+            const tmpJSON = data.data;
+            console.log('ProfileScreen.js PPH/setUserData response:', tmpJSON);
+            setValueAge(tmpJSON['age'].toString());
+            setValueHeightFeet(tmpJSON['height_feet'].toString());
+            setValueHeightInches(tmpJSON['height_inches'].toString());
+            setValueGender(tmpJSON['gender'].toString());
+            setValueWeight(tmpJSON['weight'].toString());
+            setValueActivity(tmpJSON['activity'].toString());
+          }
+          else {
+            console.log('ProfileScreen.js 92: Error with GET PPH/setUserData');
+            setValueAge(null);
+            setValueHeightFeet(null);
+            setValueHeightInches(null);
+            setValueGender(null);
+            setValueWeight(null);
+            setValueActivity(null);
+          }
+          
+      })
+      .catch(error => console.error(error));
+  }
+  /* SET OR UPDATE BIOMETRIC MEASUREMENTS USING POST PPH/setUserData */
+  const setBiometricMeasurements = async () => {
+    var tmpBody = {
+      'username': getGLOBAL_USERNAME(),
+      'height_feet': parseInt(valueHeightFeet),
+      'height_inches': parseInt(valueHeightInches),
+      'weight': parseInt(valueWeight),
+      'age': parseInt(valueAge),
+      'gender': valueGender,
+      'activity': valueActivity
+    }
+    var requestOptions = {
+      method: 'POST',
+      httpMethod: 'POST',
+      body: JSON.stringify(tmpBody)
+    }
+    const url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/setUserData';
+    fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      if(data.message === 'User data retrieved successfully'){
+        console.log('ProfileScreen.js 130:', data);
+      }
+      if(data.message === 'User data added successfully'){
+        console.log('ProfileScreen.js 133:', data);
+      }
+      else{
+        console.log('ProfileScreen.js 136: Error with POST PPH/setUserData')
+        console.log(data);
+      }
+    })
+    .catch(error => console.error(error));
+  }
+  /* GET MACRONUTRIENT VALUES USING GET PPH/? */
+  const getMacroValues = async () => {
+    const base_url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/setUserGoals';
+    const username = getGLOBAL_USERNAME()
+    const params = `?user_id=${username}`
+    const url = base_url + params;
+    console.log('ProfileScreen.js 149: PPH/setUserGoals URL -->', url);
+    var requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
+    await fetch(url, requestOptions)
+      .then(response => response.json())
+      .then((data) => {
+          if(data.message === 'User data retrieved successfully'){
+            const tmpJSON = data.data[0];
+            console.log('ProfileScreen.js 159: GET PPH/setUserGoals response:', tmpJSON);
+            /* SET MACRONUTRIENT CURRENT & GOAL VALUE STATES */
+            setValueCurrentCalories(tmpJSON['current_calories']);
+            setValueCurrentCarbs(tmpJSON['current_carbs']);
+            setValueCurrentFats(tmpJSON['current_fat']);
+            setValueCurrentProteins(tmpJSON['current_protein']);
+            setValueGoalCalories(tmpJSON['calories_goal']);
+            setValueGoalCarbs(tmpJSON['carb_goal']);
+            setValueGoalFats(tmpJSON['fat_goal']);
+            setValueGoalProteins(tmpJSON['protein_goal']);
+          }
+          else {
+            console.log('ProfileScreen.js 171: Error with GET PPH/setUserGoals');
+            /* MAKE NULL: MACRONUTRIENT CURRENT & GOAL VALUE STATES */
+            setValueCurrentCalories(null);
+            setValueCurrentCarbs(null);
+            setValueCurrentFats(null);
+            setValueCurrentProteins(null);
+            setValueGoalCalories(null);
+            setValueGoalCarbs(null);
+            setValueGoalFats(null);
+            setValueGoalProteins(null);
+          }
+      })
+      .catch(error => console.error(error));
+  }
+  /* SET MACRONUTRIENT VALUES USING GET PPH/? */
+  const setMacroValues = async () => {
+    var tmpBody = {
+      'user_id': getGLOBAL_USERNAME(),
+      'current_calories': valueCurrentCalories,
+      'current_carbs': valueCurrentCarbs,
+      'current_fat': valueCurrentFats,
+      'current_protein': valueCurrentProteins,
+      'calories_goal': valueGoalCalories,
+      'carb_goal': valueGoalCarbs,
+      'fat_goal': valueGoalFats,
+      'protein_goal': valueGoalProteins
+    }
+    var requestOptions = {
+      method: 'POST',
+      httpMethod: 'POST',
+      body: JSON.stringify(tmpBody)
+    }
+    const url = 'https://y3xs5g62z3.execute-api.us-east-1.amazonaws.com/test/setUserGoals';
+    fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(data => {
+      if(data.message === 'Record added/updated successfully'){
+        console.log('ProfileScreen.js 202: POST PPH/setUserGoals', data);
+      }
+      else{
+        console.log('ProfileScreen.js 205: Error with POST PPH/setUserGoals', data);
+      }
+    })
+    .catch(error => console.error(error));
+  }
+  /* HTML & JSX CODE */
+  return (
+    // <SafeAreaView style={styles.container}>
+    <View style={styles.mainContainer}>
+      <ScrollView
+        style={styles.scrollingPart}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>}
+      >
+          {/* VIEW FOR HEADING + SUBHEADING */}
+          <View style={{padding: 15}}>
+            <Text style={{fontSize: 24, fontWeight: 'bold'}}>User Profile</Text>
+            <Text></Text>
+            <Text style={{fontSize: 22, textAlign: 'center'}}>Macronutrient Goals</Text>
+          </View>
+          {/* CURRENT CALORIES */}
+          <Text style={styles.text_header}>Current Calories Consumed:</Text>
+          <Text style={styles.text_instruction}>Enter in the current # of calories you have consumed today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(currentCalories) => setValueCurrentCalories(currentCalories)}
+            value={valueCurrentCalories}
+            keyboardType='numeric'
+          />
+          {/* CALORIE GOAL */}
+          <Text style={styles.text_header}>Calorie Goal:</Text>
+          <Text style={styles.text_instruction}>Enter in the # of calories you would like to consume today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(goalCalories) => setValueGoalCalories(goalCalories)}
+            value={valueGoalCalories}
+            keyboardType='numeric'
+          />
+          {/* CURRENT CARBS */}
+          <Text style={styles.text_header}>Current Carbohydrates Consumed:</Text>
+          <Text style={styles.text_instruction}>Enter in the current # of carbs you have consumed today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(currentCarbs) => setValueCurrentCarbs(currentCarbs)}
+            value={valueCurrentCarbs}
+            keyboardType='numeric'
+          />
+          {/* CARB GOAL */}
+          <Text style={styles.text_header}>Carbohydrates Goal:</Text>
+          <Text style={styles.text_instruction}>Enter in the # of carbs you would like to consume today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(goalCarbs) => setValueGoalCarbs(goalCarbs)}
+            value={valueGoalCarbs}
+            keyboardType='numeric'
+          />
+          {/* CURRENT PROTEINS */}
+          <Text style={styles.text_header}>Current Protein Consumed:</Text>
+          <Text style={styles.text_instruction}>Enter in the current # of grams of protein you have consumed today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(currentProtein) => setValueCurrentProteins(currentProtein)}
+            value={valueCurrentProteins}
+            keyboardType='numeric'
+          />
+          {/* PROTEIN GOAL */}
+          <Text style={styles.text_header}>Protein Goal:</Text>
+          <Text style={styles.text_instruction}>Enter in the # of grams of protein you would like to consume today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(goalProtein) => setValueGoalProteins(goalProtein)}
+            value={valueGoalProteins}
+            keyboardType='numeric'
+          />
+          {/* CURRENT FATS */}
+          <Text style={styles.text_header}>Current Fat Consumed:</Text>
+          <Text style={styles.text_instruction}>Enter in the current # of grams of fat you have consumed today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(currentFat) => setValueCurrentFats(currentFat)}
+            value={valueCurrentFats}
+            keyboardType='numeric'
+          />
+          {/* FATS GOAL */}
+          <Text style={styles.text_header}>Fat Goal:</Text>
+          <Text style={styles.text_instruction}>Enter in the # of grams of fat you would like to consume today.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(goalFats) => setValueGoalFats(goalFats)}
+            value={valueGoalFats}
+            keyboardType='numeric'
+          />
+          <View>
+          <Text style={styles.text_header}>Update Macronutrient Metrics</Text>
+          {valueCurrentCalories && valueCurrentCarbs && valueCurrentFats && valueCurrentProteins && 
+           valueGoalCalories && valueGoalCarbs && valueGoalFats && valueGoalProteins ?
+              <TouchableOpacity onPress={setMacroValues} style={styles.button_updateMacros}>
+                <Text style={styles.text_button}>Update Macronutrient Values</Text>
+              </TouchableOpacity>
+              :
+              <Text>
+                  First, please enter values for the current / goal macronutrient values.
+              </Text>
+          }
+        </View>
+          {/* VIEW FOR SUBHEADING */}
+          <View style={{padding: 15}}>
+            <Text style={{fontSize: 22, textAlign: 'center'}}>Biometric Measurements</Text>
+          </View>
+          {/* AGE */}
+          <Text style={styles.text_header}>Age:</Text>
+          <Text style={styles.text_instruction}>Enter in your age in # of years.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(age) => setValueAge(age)}
+            value={valueAge}
+            keyboardType='numeric'
+          />
+          {/* HEIGHT IN FEET */}
+          <Text style={styles.text_header}>Height in Feet:</Text>
+          <Text style={styles.text_instruction}>Enter in your height in # of feet.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(height_feet) => setValueHeightFeet(height_feet)}
+            value={valueHeightFeet}
+            keyboardType='numeric'
+          />
+          {/* HEIGHT IN INCHES */}
+          <Text style={styles.text_header}>Height in Inches:</Text>
+          <Text style={styles.text_instruction}>Enter in your height in # of inches.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(height_inches) => setValueHeightInches(height_inches)}
+            value={valueHeightInches}
+            keyboardType='numeric'
+          />
+          {/* WEIGHT */}
+          <Text style={styles.text_header}>Weight:</Text>
+          <Text style={styles.text_instruction}>Enter in your weight in # of pounds.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(weight) => setValueWeight(weight)}
+            value={valueWeight}
+            keyboardType='numeric'
+          />
+          {/* GENDER */}
+          <Text style={styles.text_header}>Gender:</Text>
+          <Text style={styles.text_instruction}>Enter in your gender as M or F.</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(gender) => setValueGender(gender)}
+            value={valueGender}
+          />
+          {/* ACTIVITY LEVEL */}
+          <Text style={styles.text_header}>Activity Level:</Text>
+          <Text style={styles.text_instruction}>Enter in your activity level as 1 of these 4 choices:</Text>
+          <Text>{'\u2022'} S for Sedentary</Text>
+          <Text>{'\u2022'} O for Occasionally Active</Text>
+          <Text>{'\u2022'} A for Active</Text>
+          <Text style={styles.text_instruction}>{'\u2022'} H for Highly Active</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(activity) => setValueActivity(activity)}
+            value={valueActivity}
+          />
+        <View>
+          <Text style={styles.text_header}>Calculate Basal Metabolic Rate</Text>
+          {valueAge && valueHeightFeet && valueHeightInches && valueGender && valueActivity ?
+              <TouchableOpacity onPress={getBMRCalculations} style={styles.button_bmr}>
+                <Text style={styles.text_button}>Calculate BMR</Text>
+              </TouchableOpacity>
+              :
+              <Text>
+                  First, please enter values for age, height, weight, gender, and activity level.
+              </Text>
+          }
+          <Text></Text>
+          <TouchableOpacity onPress={showBMRDescription} style={styles.button_what_is_bmr}>
+            <Text style={styles.text_button}>What's BMR?</Text>
+          </TouchableOpacity>
+        </View>
+        <Text></Text>
+        <View>
+          <Text style={styles.text_header}>Update Biometric Measurements</Text>
+          {valueAge && valueHeightFeet && valueHeightInches && valueGender && valueActivity ?
+              <TouchableOpacity onPress={setBiometricMeasurements} style={styles.button_updateProfile}>
+                <Text style={styles.text_button}>Update Biometric Measurements</Text>
+              </TouchableOpacity>
+              :
+              <Text>
+                  First, please enter values for age, height, weight, gender, and activity level.
+              </Text>
+          }
+        </View>
+      </ScrollView>
+    </View>
+  );
 };
-
+/* STYLESHEET */
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'stretch',
+      justifyContent: 'flex-start',
     },
-    text: {
+    mainContainer: {
+      flex:1, 
+      paddingTop: 50, 
+      paddingHorizontal: 15,
+    },
+    scrollingPart: {
+      flex: 1,
+    },
+    text_header: {
       fontSize: 16,
       fontWeight: 'bold',
       textAlign: 'left',
-      paddingTop: 50,
+      paddingBottom: 5,
     },
-    pickerContainer: {
-        flexDirection: 'row',
-        marginTop: 5,
-        marginBottom: 5,
-        borderColor: 'black',
-        borderWidth: 2,
-        overflow: 'hidden',
+    text_instruction: {
+      fontSize: 14,
+      textAlign: 'left',
+      paddingBottom: 5
+    },
+    text_button: {
+      textAlign: 'center', 
+      fontWeight: 'bold'
+    },
+    input: {
+      borderWidth: 3,
+      borderColor: 'black',
+      fontSize: 12,
+      width: '100%',
+      padding: 10,
+      marginBottom: 10
+    },
+    button_bmr: {
+      backgroundColor: '#007bff',
+      padding: 10,
+      borderRadius: 5,
+      marginBottom: 20,
+    },
+    button_what_is_bmr: {
+      backgroundColor: '#9D8DF1',
+      padding: 10,
+      borderRadius: 5,
+      marginBottom: 20,
+    },
+    button_updateProfile: {
+      backgroundColor: '#55ba45',
+      padding: 10,
+      borderRadius: 5,
+      marginBottom: 20,
+    },
+    button_updateMacros: {
+      backgroundColor: '#efad32',
+      padding: 10,
+      borderRadius: 5,
+      marginBottom: 20,
     }
 });
