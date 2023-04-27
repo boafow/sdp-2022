@@ -137,8 +137,8 @@ export default NutrientCircles = (props) => {
               </CircularProgress>
             </View>
             <View style={styles.infoContainer}>
-              <Text style={styles.infoText}>Macros Eaten: {macrosEaten}g</Text>
-              <Text style={styles.infoText}>Macro Goal: {macroGoal}g</Text>
+              <Text style={styles.infoText}>Macros Eaten: {macrosEaten}</Text>
+              <Text style={styles.infoText}>Macro Goal: {macroGoal}</Text>
               <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
                 <Text style={styles.closeButtonText}>Close</Text>
               </TouchableOpacity>
